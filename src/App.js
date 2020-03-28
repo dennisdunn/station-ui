@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navbar } from "react-bootstrap";
+import { Navbar, Container, Row, Col } from "react-bootstrap";
 import { callApi, SdrControl, StationInfo } from "./components";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       setStation(data.location)
     );
     callApi("http://localhost:1882/api/sdrs/main", setSdr);
-  }, [station, sdr]);
+  }, []);
 
   return (
     <div>
@@ -23,7 +23,18 @@ function App() {
           </Navbar.Text>
         </Navbar.Collapse>
       </Navbar>
-      <SdrControl {...sdr} />
+      <Container fluid style={{marginTop:'0.5em'}}>
+        <Row>
+          <Col xs={4}>
+            <SdrControl
+              {...sdr}
+              onApply={setSdr}
+              onRefresh={() => setSdr(undefined)}
+            />
+          </Col>
+          <Col></Col>
+        </Row>
+      </Container>
     </div>
   );
 }
