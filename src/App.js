@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Navbar, Container, Row, Col } from "react-bootstrap";
+import { Col, Container, Navbar, Row } from "react-bootstrap";
 import { callApi, SdrControl, StationInfo } from "./components";
 
 function App() {
-  const [station, setStation] = useState(null);
-  const [sdr, setSdr] = useState(null);
+  const [station, setStation] = useState();
+  const [sdr, setSdr] = useState();
 
   useEffect(() => {
-    callApi("http://localhost:1881/api/sys/qth", data =>
-      setStation(data.location)
+    callApi({ url: "http://localhost:1881/api/sys/qth" }, ({ location }) =>
+      setStation(location)
     );
-    callApi("http://localhost:1882/api/sdrs/main", setSdr);
+  }, []);
+
+  useEffect(() => {
+    callApi({ url: "http://localhost:1882/api/sdrs/main" }, setSdr);
   }, []);
 
   return (
@@ -23,13 +26,13 @@ function App() {
           </Navbar.Text>
         </Navbar.Collapse>
       </Navbar>
-      <Container fluid style={{marginTop:'0.5em'}}>
+      <Container fluid style={{ marginTop: "0.5em" }}>
         <Row>
           <Col xs={4}>
             <SdrControl
               {...sdr}
               onApply={setSdr}
-              onRefresh={() => setSdr(undefined)}
+              onRefresh={setSdr}
             />
           </Col>
           <Col></Col>

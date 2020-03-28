@@ -5,8 +5,7 @@ import {
   ButtonToolbar,
   Col,
   Form,
-  Row,
-  Container
+  Row
 } from "react-bootstrap";
 
 export const SdrControl = props => {
@@ -17,7 +16,8 @@ export const SdrControl = props => {
   const [agc, setAgc] = useState(props.agc);
 
   return (
-    <fieldset><legend>SDR Settings</legend>
+    <fieldset>
+      <legend>SDR Settings</legend>
       <Form>
         <Form.Group as={Row}>
           <Form.Label column="sm" xs={3}>
