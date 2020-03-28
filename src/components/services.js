@@ -1,23 +1,15 @@
-import { dgram } from "dgram";
+import axios from "axios";
 
-export const udp = ({ packet, host, port }) => {
-  return new Promise((resolve, reject) => {
-    const socket = dgram.createSocket("udp4");
-    let buffer = new Buffer();
+export const callApi = (url, onData) => {
+  async function fetchdata() {
+    const result = await axios(url);
+    onData(result.data);
+  }
 
-    socket.on("message", resp => {
-      buffer = Buffer.concat(buffer, resp);
-    });
-
-    socket.on("close", () => {
-      resolve(buffer.toString());
-    });
-
-    socket.on("error", err => {
-      reject(err);
-    });
-
-    const req = Buffer.from(packet);
-    socket.send(req, 0, req.length, port, host);
-  });
+  const valid = !url.endsWith("/") && url.lastIndexOf("//") === 5;
+  if (valid) {
+    fetchdata();
+  } else {
+    onData(undefined);
+  }
 };

@@ -1,38 +1,29 @@
-import { AppBar, Toolbar, Typography, Paper } from "@material-ui/core";
-import React from "react";
-import { StationInfo, FmControl } from "./components";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  content: {
-    margin: "1em"
-  },
-  title: {
-    flexGrow: 1
-  }
-}));
+import React, { useEffect, useState } from "react";
+import { Navbar } from "react-bootstrap";
+import { callApi, SdrControl, StationInfo } from "./components";
 
 function App() {
-  const classes = useStyles();
+  const [station, setStation] = useState(null);
+  const [sdr, setSdr] = useState(null);
+
+  useEffect(() => {
+    callApi("http://localhost:1881/api/sys/qth", data =>
+      setStation(data.location)
+    );
+    callApi("http://localhost:1882/api/sdrs/main", setSdr);
+  }, [station, sdr]);
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Remote Ground Station
-          </Typography>
-          <StationInfo callsign="KE8HMV" />
-        </Toolbar>
-      </AppBar>
-      <div className={classes.content}>
-        <Paper>
-          <FmControl host="localhost" port={6020} />
-        </Paper>
-      </div>
+    <div>
+      <Navbar bg="dark" variant="dark">
+        <Navbar.Brand href="/">Ground Station Control</Navbar.Brand>
+        <Navbar.Collapse className="justify-content-end">
+          <Navbar.Text>
+            <StationInfo station={station} />
+          </Navbar.Text>
+        </Navbar.Collapse>
+      </Navbar>
+      <SdrControl {...sdr} />
     </div>
   );
 }
