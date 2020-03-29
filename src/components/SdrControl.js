@@ -49,8 +49,8 @@ export const SdrControl = ({ source, onApply }) => {
           <RadioGroup
             row
             value={mode}
-            onChange={e => {
-              setMode(Number.parseFloat(e.target.value));
+            onChange={(e,v) => {
+              setMode(Number.parseInt(v));
             }}
           >
             <FormControlLabel
@@ -81,7 +81,7 @@ export const SdrControl = ({ source, onApply }) => {
           <Typography id="fLabel">{freq} MHz</Typography>
           <Slider
             value={freq}
-            aria-labelledby="gLabel"
+            aria-labelledby="fLabel"
             valueLabelDisplay="off"
             step={0.1}
             min={88}
