@@ -1,43 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Col, Container, Navbar, Row } from "react-bootstrap";
-import { callApi, SdrControl, StationInfo } from "./components";
+import { AppBar, makeStyles, Toolbar, Typography } from "@material-ui/core";
+import React from "react";
+import { SdrControl, StationInfo } from "./components";
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1
+  },
+  title: {
+    flexGrow: 1
+  }
+}));
 
 function App() {
-  const [station, setStation] = useState();
-  const [sdr, setSdr] = useState();
-
-  useEffect(() => {
-    callApi({ url: "http://localhost:1881/api/sys/qth" }, ({ location }) =>
-      setStation(location)
-    );
-  }, []);
-
-  useEffect(() => {
-    callApi({ url: "http://localhost:1882/api/sdrs/main" }, setSdr);
-  }, []);
+  const classes = useStyles();
 
   return (
-    <div>
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="/">Ground Station Control</Navbar.Brand>
-        <Navbar.Collapse className="justify-content-end">
-          <Navbar.Text>
-            <StationInfo station={station} />
-          </Navbar.Text>
-        </Navbar.Collapse>
-      </Navbar>
-      <Container fluid style={{ marginTop: "0.5em" }}>
-        <Row>
-          <Col xs={4}>
-            <SdrControl
-              {...sdr}
-              onApply={setSdr}
-              onRefresh={setSdr}
-            />
-          </Col>
-          <Col></Col>
-        </Row>
-      </Container>
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography className={classes.title} variant="h6">
+            Ground Station Control
+          </Typography>
+          <StationInfo source="http://localhost:1881/api/sys/qth" />
+        </Toolbar>
+      </AppBar>
+      <SdrControl source="http://localhost:1882/api/sdrs/main" />
     </div>
   );
 }

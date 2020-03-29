@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { callApi } from "./services";
 
-export const StationInfo = ({ station }) => {
-  if (!station) return <div />;
+export const StationInfo = ({ source }) => {
+  const [state, setState] = useState({
+    designation: "",
+    lat: "",
+    lon: "",
+    elevation: ""
+  });
 
-  const { designation, lat, lon, elevation } = station;
+  useEffect(() => {
+    callApi({ url: source }, ({ location }) => setState(location));
+  }, [source]);
 
   return (
     <div>
-      {designation} Coord: {lat + "," + -1 * +lon} Elev: {elevation} m
+      {state.designation}&nbsp;
+      Coord: {Number(state.lat)}, {-1 * Number(state.lon)}&nbsp;
+      Elev: {Number(state.elevation)} m
     </div>
   );
 };
