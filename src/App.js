@@ -1,6 +1,6 @@
 import { AppBar, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import React from "react";
-import { SdrControl, StationInfo } from "./components";
+import { saveSdrSettings, SdrControl, StationInfo } from "./components";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,7 +24,10 @@ function App() {
           <StationInfo source="http://localhost:1881/api/sys/qth" />
         </Toolbar>
       </AppBar>
-      <SdrControl source="http://localhost:1882/api/sdrs/main" />
+      <SdrControl
+        source="http://localhost:1882/api/sdrs/main"
+        onApply={saveSdrSettings}
+      />
     </div>
   );
 }

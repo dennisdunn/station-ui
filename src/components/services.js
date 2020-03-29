@@ -17,8 +17,7 @@ export const callApi = (options, onData) => {
 
 // sdr settings
 
-export const saveSdrSettings = (data, resetTrigger) => {
+export const saveSdrSettings = (data) => {
   console.log(data);
   callApi({ url: "http://localhost:1882/api/sdrs/main", method: "POST", data });
-  resetTrigger();
 };
