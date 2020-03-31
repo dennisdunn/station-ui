@@ -16,7 +16,8 @@ import React, { useEffect, useState } from "react";
 import { callApi } from "./services";
 
 const useStyles = makeStyles(theme => ({
-  root: { maxWidth: "40ch" }
+  root: { maxWidth: "40ch" },
+  switch: { display: 'flex', justifyItems: 'end' }
 }));
 
 const gainDisplay = v => {
@@ -49,7 +50,7 @@ export const SdrControl = ({ source, onApply }) => {
           <RadioGroup
             row
             value={mode}
-            onChange={(e,v) => {
+            onChange={(e, v) => {
               setMode(Number.parseInt(v));
             }}
           >
@@ -116,6 +117,8 @@ export const SdrControl = ({ source, onApply }) => {
               setGain(v);
             }}
           />
+        </FormControl>
+        <FormControl className={classes.switch}>
           <FormControlLabel
             label="AGC"
             labelPlacement="start"

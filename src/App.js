@@ -28,7 +28,7 @@ function App() {
         source="http://localhost:1882/api/sdrs/main"
         onApply={saveSdrSettings}
       />
-      <AudioControl source="http://localhost:8000/tone" />
+      <AudioControl source="http://localhost:8000/receiver" />
     </div>
   );
 }
