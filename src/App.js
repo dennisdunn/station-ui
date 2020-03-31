@@ -1,6 +1,7 @@
 import { AppBar, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import React from "react";
 import { AudioControl, saveSdrSettings, SdrControl, StationInfo } from "./components";
+import {baseUrl, streams} from './stream.conf';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,7 +29,7 @@ function App() {
         source="http://localhost:1882/api/sdrs/main"
         onApply={saveSdrSettings}
       />
-      <AudioControl source="http://localhost:8000/receiver" />
+      <AudioControl baseUrl={baseUrl} streams={streams} />
     </div>
   );
 }

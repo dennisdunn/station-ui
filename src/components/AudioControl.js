@@ -1,26 +1,40 @@
-import { Card, CardContent, FormControl, FormControlLabel, makeStyles, Switch } from '@material-ui/core';
+import { Card, CardContent, FormControl, FormControlLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
 import React, { useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
     root: { maxWidth: "40ch" },
-    switch: { display: 'flex', justifyItems: 'end' }
+    cardControls: { display: 'flex', justifyItems: 'end' },
+    select: {
+        margin: theme.spacing(1),
+        minWidth: 120,}
 }));
 
-export const AudioControl = ({ source }) => {
-    const [url, setUrl] = useState(source);
+const getMenuItems = streams => {
+    return streams.map((x,i) => <MenuItem key={i} value={x.value}>{x.key}</MenuItem>)
+}
+
+export const AudioControl = ({ baseUrl, streams }) => {
+    const [stream, setStream] = useState(streams[0].value);
     const classes = useStyles();
 
     return (
         <Card className={classes.root}>
             <CardContent>
-                <audio className={classes.audio} src={url} controls />
-                <FormControl className={classes.switch}>
+                <audio className={classes.audio} src={`${baseUrl}/${stream}`} controls />
+                <FormControl className={classes.cardControls}>
                     <FormControlLabel
-                        label="440Hz"
+                        label="Audio sources"
                         labelPlacement="start"
-                        control={<Switch onChange={(e, v) => setUrl(v ? "http://localhost:8000/tone" : source)} />}
+                        control={
+                            <Select
+                            className={classes.select}
+                                value={stream}
+                                onChange={e => setStream(e.target.value)}
+                            >
+                                {getMenuItems(streams)}
+                            </Select>}
                     />
                 </FormControl>
             </CardContent>
-        </Card>);
+        </Card >);
 }
