@@ -1,17 +1,15 @@
-import { Card, CardContent, FormControl, FormControlLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
+import { Card, CardContent, FormControl, FormControlLabel, makeStyles, Select } from '@material-ui/core';
 import React, { useState } from 'react';
+import { mkMenuItems } from './services';
 
 const useStyles = makeStyles(theme => ({
     root: { maxWidth: "40ch" },
     cardControls: { display: 'flex', justifyItems: 'end' },
     select: {
         margin: theme.spacing(1),
-        minWidth: 120,}
+        minWidth: 120,
+    }
 }));
-
-const getMenuItems = streams => {
-    return streams.map((x,i) => <MenuItem key={i} value={x.value}>{x.key}</MenuItem>)
-}
 
 export const AudioControl = ({ baseUrl, streams }) => {
     const [stream, setStream] = useState(streams[0].value);
@@ -27,11 +25,11 @@ export const AudioControl = ({ baseUrl, streams }) => {
                         labelPlacement="start"
                         control={
                             <Select
-                            className={classes.select}
+                                className={classes.select}
                                 value={stream}
                                 onChange={e => setStream(e.target.value)}
                             >
-                                {getMenuItems(streams)}
+                                {mkMenuItems(streams)}
                             </Select>}
                     />
                 </FormControl>

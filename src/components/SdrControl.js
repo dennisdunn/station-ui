@@ -10,14 +10,19 @@ import {
   RadioGroup,
   Slider,
   Switch,
-  Typography
+  Typography, Select
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { callApi } from "./services";
+import { callApi, mkMenuItems } from "./services";
+import { bands } from '../bands.conf';
 
 const useStyles = makeStyles(theme => ({
   root: { maxWidth: "40ch" },
-  switch: { display: 'flex', justifyItems: 'end' }
+  cardControls: { display: 'flex', justifyItems: 'end' },
+  select: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  }
 }));
 
 const gainDisplay = v => {
@@ -31,6 +36,7 @@ export const SdrControl = ({ source, onApply }) => {
   const [gain, setGain] = useState(0);
   const [squelch, setSquelch] = useState(0);
   const [agc, setAgc] = useState(0);
+  const [bandIdx, setBandIdx] = useState(0);
 
   useEffect(() => {
     callApi({ url: source }, data => {
@@ -40,12 +46,31 @@ export const SdrControl = ({ source, onApply }) => {
       setGain(data.gain);
       setSquelch(data.squelch);
       setAgc(data.agc);
+      updateBand(0);
     });
   }, [source]);
 
+  const updateBand = (i) => {
+    setFreq(bands[i].band.min);
+    setBandIdx(i);
+  }
   return (
     <Card className={classes.root}>
       <CardContent>
+        <FormControl className={classes.cardControls}>
+          <FormControlLabel
+            label="Bands"
+            labelPlacement="start"
+            control={
+              <Select
+                className={classes.select}
+                value={bands[bandIdx].value}
+                onChange={e => updateBand(e.target.value)}
+              >
+                {mkMenuItems(bands)}
+              </Select>}
+          />
+        </FormControl>
         <FormControl>
           <RadioGroup
             row
@@ -56,25 +81,25 @@ export const SdrControl = ({ source, onApply }) => {
           >
             <FormControlLabel
               value={0}
-              control={<Radio />}
+              control={<Radio size='small' />}
               label="FM"
               labelPlacement="top"
             />
             <FormControlLabel
               value={1}
-              control={<Radio />}
+              control={<Radio size='small' />}
               label="AM"
               labelPlacement="top"
             />
             <FormControlLabel
               value={2}
-              control={<Radio />}
+              control={<Radio size='small' />}
               label="LSB"
               labelPlacement="top"
             />
             <FormControlLabel
               value={3}
-              control={<Radio />}
+              control={<Radio size='small' />}
               label="USB"
               labelPlacement="top"
             />
@@ -85,8 +110,8 @@ export const SdrControl = ({ source, onApply }) => {
             aria-labelledby="fLabel"
             valueLabelDisplay="off"
             step={0.1}
-            min={88}
-            max={150}
+            min={bands[bandIdx].band.min}
+            max={bands[bandIdx].band.max}
             onChange={(e, v) => {
               setFreq(v);
             }}
@@ -118,7 +143,7 @@ export const SdrControl = ({ source, onApply }) => {
             }}
           />
         </FormControl>
-        <FormControl className={classes.switch}>
+        <FormControl className={classes.cardControls}>
           <FormControlLabel
             label="AGC"
             labelPlacement="start"
