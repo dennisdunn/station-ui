@@ -1,4 +1,10 @@
-import { AppBar, makeStyles, Toolbar, Typography } from "@material-ui/core";
+import {
+  AppBar,
+  makeStyles,
+  Toolbar,
+  Typography,
+  Grid
+} from "@material-ui/core";
 import React, { useState } from "react";
 import {
   sdrConfig,
@@ -31,8 +37,10 @@ function App() {
           <StationInfo source="http://localhost:1881/api/sys/qth" />
         </Toolbar>
       </AppBar>
-      <SdrControlEditor config={config} onSave={data => setConfig(data)} />
-      <SdrControl config={config} settings={sdrSettings} />
+      <Grid container spacing={2}>
+        <SdrControlEditor config={config} onSave={data => setConfig(data)} />
+        <SdrControl config={config} settings={sdrSettings} />
+      </Grid>
     </div>
   );
 }

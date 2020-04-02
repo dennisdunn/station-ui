@@ -15,7 +15,7 @@ import {
 import React, { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
-  root: { maxWidth: "40ch" },
+  root: { maxWidth: "30ch" },
   cardControls: { display: "flex", justifyItems: "end" }
 }));
 
@@ -75,7 +75,6 @@ export const SdrControl = ({ config, settings }) => {
             step={0.1}
             min={0}
             max={50}
-            marks
             onChange={(e, v) => {
               setCurrent({ ...current, gain: v });
             }}

@@ -16,7 +16,7 @@ import {
 import React, { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
-  root: { maxWidth: "40ch" },
+  root: { maxWidth: "30ch" },
   cardControls: { display: "flex", justifyItems: "end" },
   themed: {
     margin: theme.spacing(1)
