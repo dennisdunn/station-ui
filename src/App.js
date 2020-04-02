@@ -1,7 +1,12 @@
 import { AppBar, makeStyles, Toolbar, Typography } from "@material-ui/core";
-import React from "react";
-import { AudioControl, saveSdrSettings, SdrControl, StationInfo, SdrConfigEditor } from "./components";
-import {baseUrl, streams} from './stream.conf';
+import React, { useState } from "react";
+import {
+  sdrConfig,
+  SdrControl,
+  SdrControlEditor,
+  sdrSettings,
+  StationInfo
+} from "./components";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,6 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const classes = useStyles();
+  const [config, setConfig] = useState(sdrConfig);
 
   return (
     <div className={classes.root}>
@@ -25,8 +31,8 @@ function App() {
           <StationInfo source="http://localhost:1881/api/sys/qth" />
         </Toolbar>
       </AppBar>
-      <SdrConfigEditor config={{}} />
-      <AudioControl baseUrl={baseUrl} streams={streams} />
+      <SdrControlEditor config={config} onSave={data => setConfig(data)} />
+      <SdrControl config={config} settings={sdrSettings} />
     </div>
   );
 }

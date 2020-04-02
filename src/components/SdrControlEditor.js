@@ -1,5 +1,6 @@
 import {
   Button,
+  ButtonGroup,
   Card,
   CardActions,
   CardContent,
@@ -10,43 +11,31 @@ import {
   FormLabel,
   makeStyles,
   Switch,
-  TextField,
-  ButtonGroup
+  TextField
 } from "@material-ui/core";
 import React, { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
   root: { maxWidth: "40ch" },
   cardControls: { display: "flex", justifyItems: "end" },
-  select: {
-    margin: theme.spacing(1),
-    minWidth: 120
+  themed: {
+    margin: theme.spacing(1)
   }
 }));
 
-const defaultState = {
-  key: "",
-  label: "",
-  controlUrl: "",
-  audioUrl: "",
-  minFreq: 0,
-  maxFreq: 0,
-  modes: new Set(),
-  useGain: false,
-  useSquelch: false,
-  useAgc: false
+const toState = config => {
+  return {
+    ...config,
+    modes: new Set(config.modes)
+  };
 };
 
-export const SdrConfigEditor = ({ config, onSave, onCancel }) => {
-  if (config && config.modes) {
-    config = { ...config, modes: new Set(config.modes) };
-  }
+export const SdrControlEditor = ({ config, onSave, onCancel }) => {
   const classes = useStyles();
-  const [state, setState] = useState({ ...defaultState, ...config });
+  const [state, setState] = useState(toState(config));
 
   const cancel = () => {
-    setState({ ...defaultState, ...config });
-    if (onCancel) onCancel();
+    setState(toState(config));
   };
 
   const save = () => {
@@ -71,38 +60,44 @@ export const SdrConfigEditor = ({ config, onSave, onCancel }) => {
     <Card className={classes.root}>
       <CardContent>
         <TextField
+          className={classes.themed}
           label="Key"
           value={state.key}
           onChange={e => setState({ ...state, key: e.target.value })}
         ></TextField>
         <TextField
+          className={classes.themed}
           label="Label"
           value={state.label}
           onChange={e => setState({ ...state, label: e.target.value })}
         ></TextField>
         <TextField
+          className={classes.themed}
           label="Control URL"
           value={state.controlUrl}
           onChange={e => setState({ ...state, controlUrl: e.target.value })}
         ></TextField>
         <TextField
+          className={classes.themed}
           label="Audio URL"
           value={state.audioUrl}
           onChange={e => setState({ ...state, audioUrl: e.target.value })}
         ></TextField>
         <TextField
+          className={classes.themed}
           label="Band Start"
           value={state.minFreq}
           type="number"
           onChange={e => setState({ ...state, minFreq: e.target.value })}
         ></TextField>
         <TextField
+          className={classes.themed}
           label="Band End"
           value={state.maxFreq}
           type="number"
           onChange={e => setState({ ...state, maxFreq: e.target.value })}
         ></TextField>
-        <FormControl>
+        <FormControl className={classes.themed}>
           <FormLabel>Modes</FormLabel>
           <FormGroup row>
             <FormControlLabel
@@ -146,13 +141,13 @@ export const SdrConfigEditor = ({ config, onSave, onCancel }) => {
               }
             />
           </FormGroup>
-          <FormControl>
+          <FormControl className={classes.themed}>
             <FormLabel>Interface</FormLabel>
             <FormGroup row>
               <FormControlLabel
                 label="Show Squelch?"
                 control={
-                  <Switch 
+                  <Switch
                     checked={state.useSquelch}
                     onChange={e =>
                       setState({ ...state, useSquelch: e.target.checked })
@@ -186,10 +181,14 @@ export const SdrConfigEditor = ({ config, onSave, onCancel }) => {
           </FormControl>
         </FormControl>
       </CardContent>
-      <CardActions>
+      <CardActions className={classes.cardControls}>
         <ButtonGroup>
-          <Button color='secondary' onClick={cancel}>Cancel</Button>
-          <Button color='primary' onClick={save}>Save</Button>
+          <Button color="secondary" onClick={cancel}>
+            Cancel
+          </Button>
+          <Button color="primary" onClick={save}>
+            Save
+          </Button>
         </ButtonGroup>
       </CardActions>
     </Card>
