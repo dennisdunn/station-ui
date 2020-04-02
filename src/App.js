@@ -1,21 +1,6 @@
-import {
-  AppBar,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Grid,
-  makeStyles,
-  Toolbar,
-  Typography
-} from "@material-ui/core";
+import { AppBar, Button, Dialog, DialogActions, DialogContent, Grid, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import {
-  sdrConfig,
-  SdrControl,
-  SdrControlEditor,
-  sdrSettings,
-  StationInfo
-} from "./components";
+import { Sdr, sdrConfig, SdrEditor, sdrSettings, StationInfo } from "./components";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,7 +14,8 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const classes = useStyles();
-  const [config, setConfig] = useState(sdrConfig);
+  const [sdr, setSdr] = useState(sdrConfig);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className={classes.root}>
@@ -43,19 +29,28 @@ function App() {
       </AppBar>
       <Grid className={classes.content} container spacing={2}>
         <Grid item>
-          <SdrControl
-            config={config}
-            settings={sdrSettings}
-            onChange={console.log}
-          />
+          <Sdr config={sdr} settings={sdrSettings} onChange={console.log}>
+            <Button onClick={() => setIsOpen(true)}>Edit</Button>
+          </Sdr>
         </Grid>
       </Grid>
-      <Dialog>
+      <Dialog open={isOpen}>
         <DialogContent>
-          <SdrControlEditor config={config} onChange={} />
+          <SdrEditor sdr={sdr} onChange={setSdr} />
         </DialogContent>
         <DialogActions>
-
+          <Button
+            onClick={() => {
+              setIsOpen(false);
+              setSdr(sdrConfig);
+            }}
+            color="secondary"
+          >
+            Cancel
+          </Button>
+          <Button onClick={() => setIsOpen(false)} color="primary">
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

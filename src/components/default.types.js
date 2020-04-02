@@ -2,10 +2,10 @@ export const sdrConfig = {
   key: "main",
   label: "FM Broadcast",
   controlUrl: "",
-  audioUrl: "",
+  audioUrl: "http://localhost:8000/receiver.ogg",
   minFreq: 88,
   maxFreq: 107.9,
-  modes: ["fm"],
+  modes: new Set(["fm"]),
   useGain: false,
   useSquelch: false,
   useAgc: false

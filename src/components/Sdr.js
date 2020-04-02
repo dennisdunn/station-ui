@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, FormControl, FormControlLabel, FormLabel, makeStyles, Radio, RadioGroup, Slider, Switch, Typography } from "@material-ui/core";
+import { Card, CardContent, FormControl, FormControlLabel, FormLabel, makeStyles, Radio, RadioGroup, Slider, Switch, Typography, CardActions } from "@material-ui/core";
 import React, { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
@@ -6,7 +6,7 @@ const useStyles = makeStyles(theme => ({
   cardControls: { display: "flex", justifyItems: "end" }
 }));
 
-export const SdrControl = ({ config, settings, onChange }) => {
+export const Sdr = ({ config, settings, onChange, children }) => {
   const classes = useStyles();
   const [current, setCurrent] = useState(settings);
 
@@ -17,7 +17,8 @@ export const SdrControl = ({ config, settings, onChange }) => {
   };
 
   const mkModeControl = () => {
-    return config.modes.length > 1 ? (
+    const modeList = Array.from(config.modes);
+    return modeList.length > 1 ? (
       <RadioGroup
         row
         value={current.mode}
@@ -25,7 +26,7 @@ export const SdrControl = ({ config, settings, onChange }) => {
           updateState("mode", v);
         }}
       >
-        {config.modes.map((m, i) => (
+        {modeList.map((m, i) => (
           <FormControlLabel
             key={i}
             value={m}
@@ -116,7 +117,11 @@ export const SdrControl = ({ config, settings, onChange }) => {
         {mkSquelchControl()}
         {mkGainControl()}
         {mkAgcControl()}
+        <audio src={config.audioUrl} autoPlay/>
       </CardContent>
+      <CardActions>
+       {children}
+      </CardActions>
     </Card>
   );
 };

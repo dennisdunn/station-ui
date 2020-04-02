@@ -1,5 +1,5 @@
 export * from './default.types';
-export * from './SdrControl';
-export * from './SdrControlEditor';
+export * from './Sdr';
+export * from './SdrEditor';
 export * from './services';
 export * from './StationInfo';
