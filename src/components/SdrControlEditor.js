@@ -16,7 +16,7 @@ import {
 import React, { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
-  root: { maxWidth: "30ch" },
+  root: { maxWidth: "40ch" },
   cardControls: { display: "flex", justifyItems: "end" },
   themed: {
     margin: theme.spacing(1)
@@ -141,44 +141,42 @@ export const SdrControlEditor = ({ config, onSave, onCancel }) => {
               }
             />
           </FormGroup>
-          <FormControl className={classes.themed}>
-            <FormLabel>Interface</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                label="Show Squelch?"
-                control={
-                  <Switch
-                    checked={state.useSquelch}
-                    onChange={e =>
-                      setState({ ...state, useSquelch: e.target.checked })
-                    }
-                  />
-                }
-              />
-              <FormControlLabel
-                label="Show Gain?"
-                control={
-                  <Switch
-                    checked={state.useGain}
-                    onChange={e =>
-                      setState({ ...state, useGain: e.target.checked })
-                    }
-                  />
-                }
-              />
-              <FormControlLabel
-                label="Show AGC?"
-                control={
-                  <Switch
-                    checked={state.useAgc}
-                    onChange={e =>
-                      setState({ ...state, useAgc: e.target.checked })
-                    }
-                  />
-                }
-              />
-            </FormGroup>
-          </FormControl>
+          <FormLabel>Interface</FormLabel>
+          <FormGroup>
+            <FormControlLabel
+              label="Show Squelch?"
+              control={
+                <Switch
+                  checked={state.useSquelch}
+                  onChange={e =>
+                    setState({ ...state, useSquelch: e.target.checked })
+                  }
+                />
+              }
+            />
+            <FormControlLabel
+              label="Show Gain?"
+              control={
+                <Switch
+                  checked={state.useGain}
+                  onChange={e =>
+                    setState({ ...state, useGain: e.target.checked })
+                  }
+                />
+              }
+            />
+            <FormControlLabel
+              label="Show AGC?"
+              control={
+                <Switch
+                  checked={state.useAgc}
+                  onChange={e =>
+                    setState({ ...state, useAgc: e.target.checked })
+                  }
+                />
+              }
+            />
+          </FormGroup>
         </FormControl>
       </CardContent>
       <CardActions className={classes.cardControls}>

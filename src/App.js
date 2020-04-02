@@ -1,9 +1,12 @@
 import {
   AppBar,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  Grid,
   makeStyles,
   Toolbar,
-  Typography,
-  Grid
+  Typography
 } from "@material-ui/core";
 import React, { useState } from "react";
 import {
@@ -20,7 +23,8 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
-  }
+  },
+  content: { margin: theme.spacing(1) }
 }));
 
 function App() {
@@ -37,10 +41,23 @@ function App() {
           <StationInfo source="http://localhost:1881/api/sys/qth" />
         </Toolbar>
       </AppBar>
-      <Grid container spacing={2}>
-        <SdrControlEditor config={config} onSave={data => setConfig(data)} />
-        <SdrControl config={config} settings={sdrSettings} />
+      <Grid className={classes.content} container spacing={2}>
+        <Grid item>
+          <SdrControl
+            config={config}
+            settings={sdrSettings}
+            onChange={console.log}
+          />
+        </Grid>
       </Grid>
+      <Dialog>
+        <DialogContent>
+          <SdrControlEditor config={config} onChange={} />
+        </DialogContent>
+        <DialogActions>
+
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

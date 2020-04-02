@@ -1,17 +1,4 @@
-import {
-  Card,
-  CardActions,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  makeStyles,
-  Radio,
-  RadioGroup,
-  Slider,
-  Switch,
-  Typography
-} from "@material-ui/core";
+import { Button, Card, CardActions, CardContent, FormControl, FormControlLabel, FormLabel, makeStyles, Radio, RadioGroup, Slider, Switch, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
@@ -19,9 +6,15 @@ const useStyles = makeStyles(theme => ({
   cardControls: { display: "flex", justifyItems: "end" }
 }));
 
-export const SdrControl = ({ config, settings }) => {
+export const SdrControl = ({ config, settings, onChange }) => {
   const classes = useStyles();
   const [current, setCurrent] = useState(settings);
+
+  const updateState = (key, value) => {
+    const newState = { ...current, [key]: value };
+    setCurrent(newState);
+    if (onChange) onChange(newState);
+  };
 
   const mkModeControl = () => {
     return config.modes.length > 1 ? (
@@ -29,7 +22,7 @@ export const SdrControl = ({ config, settings }) => {
         row
         value={current.mode}
         onChange={(e, v) => {
-          setCurrent({ ...current, mode: v });
+          updateState("mode", v);
         }}
       >
         {config.modes.map((m, i) => (
@@ -57,7 +50,7 @@ export const SdrControl = ({ config, settings }) => {
             max={10}
             marks
             onChange={(e, v) => {
-              setCurrent({ ...current, squelch: v });
+              updateState("squelch", v);
             }}
           />
         ]
@@ -76,7 +69,7 @@ export const SdrControl = ({ config, settings }) => {
             min={0}
             max={50}
             onChange={(e, v) => {
-              setCurrent({ ...current, gain: v });
+              updateState("gain", v);
             }}
           />
         ]
@@ -94,7 +87,7 @@ export const SdrControl = ({ config, settings }) => {
               name="agc"
               checked={current.agc}
               onChange={e => {
-                setCurrent({ ...current, agc: e.target.checked });
+                updateState("agc", e.target.checked);
               }}
             />
           }
@@ -117,14 +110,13 @@ export const SdrControl = ({ config, settings }) => {
           min={config.minFreq}
           max={config.maxfreq}
           onChange={(e, v) => {
-            setCurrent({ ...current, freq: v });
+            updateState("freq", v);
           }}
         />
         {mkSquelchControl()}
         {mkGainControl()}
         {mkAgcControl()}
       </CardContent>
-      <CardActions></CardActions>
     </Card>
   );
 };

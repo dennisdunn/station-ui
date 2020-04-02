@@ -18,3 +18,10 @@ export const sdrSettings = {
   squelch: 0, // off
   agc: false
 };
+
+export const stationInfo = {
+  designation: "",
+  lat: "",
+  lon: "",
+  elevation: ""
+};
