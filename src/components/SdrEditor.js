@@ -1,150 +1,176 @@
-import { Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, makeStyles, Switch, TextField } from "@material-ui/core";
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  makeStyles,
+  Switch,
+  TextField
+} from "@material-ui/core";
 import React, { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
   root: { maxWidth: "40ch" },
-  cardControls: { display: "flex", justifyItems: "end" },
   themed: {
     margin: theme.spacing(1)
   }
 }));
 
-export const SdrEditor = ({ sdr, onChange,children }) => {
+export const SdrEditor = ({ isOpen, data, onSave, onClose }) => {
+  const [local, setLocal] = useState({ ...data, modes: new Set(data.modes) });
   const classes = useStyles();
-  const [state, setState] = useState(sdr);
 
   const updateState = (key, value) => {
-    const newState = { ...state, [key]: value };
-    setState(newState);
-    if (onChange) onChange(newState);
+    const newState = { ...local, [key]: value };
+    setLocal(newState);
   };
 
   const setMode = e => {
-    const modes = state.modes;
+    const modes = local.modes;
     if (e.target.checked) {
       modes.add(e.target.value);
     } else {
       modes.delete(e.target.value);
     }
-    updateState('modes', modes);
+    updateState("modes", modes);
   };
 
   return (
-    <div className={classes.root}>
-      <TextField
-        className={classes.themed}
-        label="Key"
-        value={state.key}
-        onChange={e => updateState("key", e.target.value)}
-      ></TextField>
-      <TextField
-        className={classes.themed}
-        label="Label"
-        value={state.label}
-        onChange={e => updateState("label", e.target.value)}
-      ></TextField>
-      <TextField
-        className={classes.themed}
-        label="Control URL"
-        value={state.controlUrl}
-        onChange={e => updateState("controlUrl", e.target.value)}
-      ></TextField>
-      <TextField
-        className={classes.themed}
-        label="Audio URL"
-        value={state.audioUrl}
-        onChange={e => updateState("audioUrl", e.target.value)}
-      ></TextField>
-      <TextField
-        className={classes.themed}
-        label="Band Start"
-        value={state.minFreq}
-        type="number"
-        onChange={e => updateState("minFreq", e.target.value)}
-      ></TextField>
-      <TextField
-        className={classes.themed}
-        label="Band End"
-        value={state.maxFreq}
-        type="number"
-        onChange={e => updateState("maxFreq", e.target.value)}
-      ></TextField>
-      <FormControl className={classes.themed}>
-        <FormLabel>Modes</FormLabel>
-        <FormGroup row>
-          <FormControlLabel
-            label="FM"
-            control={
-              <Checkbox
-                value="fm"
-                checked={state.modes.has("fm")}
-                onChange={setMode}
-              ></Checkbox>
-            }
-          />
-          <FormControlLabel
-            label="AM"
-            control={
-              <Checkbox
-                value="am"
-                checked={state.modes.has("am")}
-                onChange={setMode}
-              ></Checkbox>
-            }
-          />
-          <FormControlLabel
-            label="LSB"
-            control={
-              <Checkbox
-                value="lsb"
-                checked={state.modes.has("lsb")}
-                onChange={setMode}
-              ></Checkbox>
-            }
-          />
-          <FormControlLabel
-            label="USB"
-            control={
-              <Checkbox
-                value="usb"
-                checked={state.modes.has("usb")}
-                onChange={setMode}
-              ></Checkbox>
-            }
-          />
-        </FormGroup>
-        <FormLabel>Interface</FormLabel>
-        <FormGroup>
-          <FormControlLabel
-            label="Show Squelch?"
-            control={
-              <Switch
-                checked={state.useSquelch}
-                onChange={e => updateState("useSquelch", e.target.checked)}
-              />
-            }
-          />
-          <FormControlLabel
-            label="Show Gain?"
-            control={
-              <Switch
-                checked={state.useGain}
-                onChange={e => updateState("useGain", e.target.checked)}
-              />
-            }
-          />
-          <FormControlLabel
-            label="Show AGC?"
-            control={
-              <Switch
-                checked={state.useAgc}
-                onChange={e => updateState("useAgc", e.target.checked)}
-              />
-            }
-          />
-        </FormGroup>
-      </FormControl>
-      {children}
-    </div>
+    <Dialog open={isOpen}>
+      <DialogContent>
+        <TextField
+          className={classes.themed}
+          label="Key"
+          value={local.key}
+          onChange={e => updateState("key", e.target.value)}
+        ></TextField>
+        <TextField
+          className={classes.themed}
+          label="Label"
+          value={local.label}
+          onChange={e => updateState("label", e.target.value)}
+        ></TextField>
+        <TextField
+          className={classes.themed}
+          label="Control URL"
+          value={local.controlUrl}
+          onChange={e => updateState("controlUrl", e.target.value)}
+        ></TextField>
+        <TextField
+          className={classes.themed}
+          label="Audio URL"
+          value={local.audioUrl}
+          onChange={e => updateState("audioUrl", e.target.value)}
+        ></TextField>
+        <TextField
+          className={classes.themed}
+          label="Band Start"
+          value={local.minFreq}
+          type="number"
+          onChange={e => updateState("minFreq", e.target.value)}
+        ></TextField>
+        <TextField
+          className={classes.themed}
+          label="Band End"
+          value={local.maxFreq}
+          type="number"
+          onChange={e => updateState("maxFreq", e.target.value)}
+        ></TextField>
+        <FormControl className={classes.themed}>
+          <FormLabel>Modes</FormLabel>
+          <FormGroup row>
+            <FormControlLabel
+              label="FM"
+              control={
+                <Checkbox
+                  value="fm"
+                  checked={local.modes.has("fm")}
+                  onChange={setMode}
+                ></Checkbox>
+              }
+            />
+            <FormControlLabel
+              label="AM"
+              control={
+                <Checkbox
+                  value="am"
+                  checked={local.modes.has("am")}
+                  onChange={setMode}
+                ></Checkbox>
+              }
+            />
+            <FormControlLabel
+              label="LSB"
+              control={
+                <Checkbox
+                  value="lsb"
+                  checked={local.modes.has("lsb")}
+                  onChange={setMode}
+                ></Checkbox>
+              }
+            />
+            <FormControlLabel
+              label="USB"
+              control={
+                <Checkbox
+                  value="usb"
+                  checked={local.modes.has("usb")}
+                  onChange={setMode}
+                ></Checkbox>
+              }
+            />
+          </FormGroup>
+          <FormLabel>Interface</FormLabel>
+          <FormGroup>
+            <FormControlLabel
+              label="Show Squelch?"
+              control={
+                <Switch
+                  checked={local.useSquelch}
+                  onChange={e => updateState("useSquelch", e.target.checked)}
+                />
+              }
+            />
+            <FormControlLabel
+              label="Show Gain?"
+              control={
+                <Switch
+                  checked={local.useGain}
+                  onChange={e => updateState("useGain", e.target.checked)}
+                />
+              }
+            />
+            <FormControlLabel
+              label="Show AGC?"
+              control={
+                <Switch
+                  checked={local.useAgc}
+                  onChange={e => updateState("useAgc", e.target.checked)}
+                />
+              }
+            />
+          </FormGroup>
+        </FormControl>{" "}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => onClose(false)} color="secondary">
+          Cancel
+        </Button>
+        <Button
+          onClick={() => {
+            onClose(false);
+            onSave(local);
+          }}
+          color="primary"
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };

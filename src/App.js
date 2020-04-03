@@ -1,4 +1,4 @@
-import { AppBar, Button, Dialog, DialogActions, DialogContent, Grid, makeStyles, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Button, Grid, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { Sdr, sdrConfig, SdrEditor, sdrSettings, StationInfo } from "./components";
 
@@ -34,25 +34,12 @@ function App() {
           </Sdr>
         </Grid>
       </Grid>
-      <Dialog open={isOpen}>
-        <DialogContent>
-          <SdrEditor sdr={sdr} onChange={setSdr} />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setIsOpen(false);
-              setSdr(sdrConfig);
-            }}
-            color="secondary"
-          >
-            Cancel
-          </Button>
-          <Button onClick={() => setIsOpen(false)} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <SdrEditor
+        isOpen={isOpen}
+        data={sdr}
+        onSave={setSdr}
+        onClose={setIsOpen}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Card, CardContent, FormControl, FormControlLabel, FormLabel, makeStyles, Radio, RadioGroup, Slider, Switch, Typography, CardActions } from "@material-ui/core";
+import { Card, CardActions, CardContent, FormControl, FormControlLabel, FormLabel, makeStyles, Radio, RadioGroup, Slider, Switch, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 
 const useStyles = makeStyles(theme => ({
@@ -97,6 +97,10 @@ export const Sdr = ({ config, settings, onChange, children }) => {
     ) : null;
   };
 
+  const mkAudioControl = () => {
+    return config.audioUrl ? <audio src={config.audioUrl} autoPlay /> : null;
+  };
+
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -109,7 +113,7 @@ export const Sdr = ({ config, settings, onChange, children }) => {
           valueLabelDisplay="off"
           step={0.1}
           min={config.minFreq}
-          max={config.maxfreq}
+          max={config.maxFreq}
           onChange={(e, v) => {
             updateState("freq", v);
           }}
@@ -117,11 +121,9 @@ export const Sdr = ({ config, settings, onChange, children }) => {
         {mkSquelchControl()}
         {mkGainControl()}
         {mkAgcControl()}
-        <audio src={config.audioUrl} autoPlay/>
+        {mkAudioControl()}
       </CardContent>
-      <CardActions>
-       {children}
-      </CardActions>
+      <CardActions>{children}</CardActions>
     </Card>
   );
 };
