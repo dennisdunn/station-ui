@@ -1,21 +1,40 @@
-import { AppBar, Button, Grid, makeStyles, Toolbar, Typography } from "@material-ui/core";
+import {
+  AppBar,
+  Button,
+  Grid,
+  makeStyles,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 import React, { useState } from "react";
-import { Sdr, sdrConfig, SdrEditor, sdrSettings, StationInfo } from "./components";
+import {
+  Sdr,
+  sdrConfig,
+  SdrEditor,
+  sdrSettings,
+  StationInfo,
+  callApi,
+} from "./components";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
-  content: { margin: theme.spacing(1) }
+  content: { margin: theme.spacing(1) },
 }));
 
 function App() {
   const classes = useStyles();
   const [sdr, setSdr] = useState(sdrConfig);
+  const [settings, setSettings] = useState(sdrSettings);
   const [isOpen, setIsOpen] = useState(false);
+
+  const sdrTune = (data) => {
+    callApi({ url: sdr.controlUrl, method: "POST", data });
+  };
 
   return (
     <div className={classes.root}>
@@ -29,7 +48,7 @@ function App() {
       </AppBar>
       <Grid className={classes.content} container spacing={2}>
         <Grid item>
-          <Sdr config={sdr} settings={sdrSettings} onChange={console.log}>
+          <Sdr config={sdr} settings={settings} onChange={sdrTune}>
             <Button onClick={() => setIsOpen(true)}>Edit</Button>
           </Sdr>
         </Grid>

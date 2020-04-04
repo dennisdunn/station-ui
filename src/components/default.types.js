@@ -14,7 +14,7 @@ export const sdrConfig = {
 export const sdrSettings = {
   freq: 89.9,
   mode: "fm",
-  gain: 0, // auto
+  gain: -0.1, // auto
   squelch: 0, // off
   agc: false
 };

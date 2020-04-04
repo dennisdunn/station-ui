@@ -1,9 +1,22 @@
-import { Card, CardActions, CardContent, FormControl, FormControlLabel, FormLabel, makeStyles, Radio, RadioGroup, Slider, Switch, Typography } from "@material-ui/core";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  makeStyles,
+  Radio,
+  RadioGroup,
+  Slider,
+  Switch,
+  Typography,
+} from "@material-ui/core";
 import React, { useState } from "react";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { maxWidth: "30ch" },
-  cardControls: { display: "flex", justifyItems: "end" }
+  cardControls: { display: "flex", justifyItems: "end" },
 }));
 
 export const Sdr = ({ config, settings, onChange, children }) => {
@@ -13,7 +26,31 @@ export const Sdr = ({ config, settings, onChange, children }) => {
   const updateState = (key, value) => {
     const newState = { ...current, [key]: value };
     setCurrent(newState);
-    if (onChange) onChange(newState);
+  };
+
+  const commitChange = (key, value) => {
+    const kvp = {};
+    kvp[key] = value;
+    if (onChange) onChange(kvp);
+  };
+
+  const mkFrequencyControl = () => {
+    return (
+      <Slider
+        value={current.freq}
+        aria-labelledby="fLabel"
+        valueLabelDisplay="off"
+        step={0.1}
+        min={config.minFreq}
+        max={config.maxFreq}
+        onChange={(e, v) => {
+          updateState("freq", v);
+        }}
+        onChangeCommitted={(e, v) => {
+          commitChange("freq", `${v}Mhz`);
+        }}
+      />
+    );
   };
 
   const mkModeControl = () => {
@@ -24,6 +61,7 @@ export const Sdr = ({ config, settings, onChange, children }) => {
         value={current.mode}
         onChange={(e, v) => {
           updateState("mode", v);
+          commitChange("mode", v);
         }}
       >
         {modeList.map((m, i) => (
@@ -45,7 +83,7 @@ export const Sdr = ({ config, settings, onChange, children }) => {
           <Slider
             value={current.squelch}
             valueLabelDisplay="auto"
-            valueLabelFormat={v => (v === 0 ? "Off" : `${v}`)}
+            valueLabelFormat={(v) => (v === 0 ? "Off" : `${v}`)}
             step={1}
             min={0}
             max={10}
@@ -53,7 +91,10 @@ export const Sdr = ({ config, settings, onChange, children }) => {
             onChange={(e, v) => {
               updateState("squelch", v);
             }}
-          />
+            onChangeCommitted={(e, v) => {
+              commitChange("squelch", v);
+            }}
+          />,
         ]
       : null;
   };
@@ -65,14 +106,17 @@ export const Sdr = ({ config, settings, onChange, children }) => {
           <Slider
             value={current.gain}
             valueLabelDisplay="auto"
-            valueLabelFormat={v => (v === 0 ? "Auto" : `${v}`)}
+            valueLabelFormat={(v) => (v < 0 ? "Auto" : `${v}`)}
             step={0.1}
-            min={0}
+            min={-0.1}
             max={50}
             onChange={(e, v) => {
               updateState("gain", v);
             }}
-          />
+            onChangeCommitted={(e, v) => {
+              commitChange("gain", v);
+            }}
+          />,
         ]
       : null;
   };
@@ -87,8 +131,9 @@ export const Sdr = ({ config, settings, onChange, children }) => {
             <Switch
               name="agc"
               checked={current.agc}
-              onChange={e => {
+              onChange={(e) => {
                 updateState("agc", e.target.checked);
+                commitChange("gain", e.target.checked);
               }}
             />
           }
@@ -107,17 +152,7 @@ export const Sdr = ({ config, settings, onChange, children }) => {
         <FormLabel>{config.label}</FormLabel>
         {mkModeControl()}
         <Typography id="fLabel">{current.freq} MHz</Typography>
-        <Slider
-          value={current.freq}
-          aria-labelledby="fLabel"
-          valueLabelDisplay="off"
-          step={0.1}
-          min={config.minFreq}
-          max={config.maxFreq}
-          onChange={(e, v) => {
-            updateState("freq", v);
-          }}
-        />
+        {mkFrequencyControl()}
         {mkSquelchControl()}
         {mkGainControl()}
         {mkAgcControl()}
