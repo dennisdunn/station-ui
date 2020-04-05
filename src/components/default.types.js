@@ -1,5 +1,4 @@
-export const tunerDef = {
-  key: "main",
+export const tunerDefs = [{
   label: "FM Broadcast",
   controlUrl: "",
   audioUrl: "http://localhost:8000/receiver.ogg",
@@ -9,7 +8,29 @@ export const tunerDef = {
   showGain: false,
   showSquelch: false,
   showAgc: false,
-};
+},{
+  label: "FM Broadcast (Adv)",
+  controlUrl: "",
+  audioUrl: "http://localhost:8000/receiver.ogg",
+  minFreq: 88,
+  maxFreq: 107.9,
+  modes: new Set(["fm"]),
+  showGain: true,
+  showSquelch: true,
+  showAgc: true,
+}];
+
+export const defaultTunerDefinition ={
+  label: "",
+  controlUrl: "",
+  audioUrl: "",
+  minFreq: 0.5,
+  maxFreq: 1750,
+  modes: new Set(["fm","am","lsb","usb"]),
+  showGain: false,
+  showSquelch: false,
+  showAgc: false,
+}
 
 export const station = {
   label: "KJTA",

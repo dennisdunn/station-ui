@@ -13,6 +13,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { defaultTunerDefinition } from "../default.types";
 
 const useStyles = makeStyles((theme) => ({
   root: { maxWidth: "40ch" },
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const TunerDefEditor = ({ isOpen, data, onSave, onClose }) => {
+  data = data || defaultTunerDefinition;
   const [local, setLocal] = useState({ ...data, modes: new Set(data.modes) });
   const classes = useStyles();
 
@@ -45,16 +47,10 @@ export const TunerDefEditor = ({ isOpen, data, onSave, onClose }) => {
       <DialogContent>
         <TextField
           className={classes.themed}
-          label="Key"
-          value={local.key}
-          onChange={(e) => updateState("key", e.target.value)}
-        ></TextField>
-        <TextField
-          className={classes.themed}
           label="Label"
           value={local.label}
           onChange={(e) => updateState("label", e.target.value)}
-        ></TextField>
+        ></TextField><br/>
         <TextField
           className={classes.themed}
           label="Control URL"
@@ -69,14 +65,14 @@ export const TunerDefEditor = ({ isOpen, data, onSave, onClose }) => {
         ></TextField>
         <TextField
           className={classes.themed}
-          label="Band Start"
+          label="Band Start (MHz)"
           value={local.minFreq}
           type="number"
           onChange={(e) => updateState("minFreq", e.target.value)}
         ></TextField>
         <TextField
           className={classes.themed}
-          label="Band End"
+          label="Band End (MHz)"
           value={local.maxFreq}
           type="number"
           onChange={(e) => updateState("maxFreq", e.target.value)}

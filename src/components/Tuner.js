@@ -90,7 +90,6 @@ export const Tuner = ({ config, presets, onChange, children }) => {
           <AudioStreamer enabled source={config.audioUrl} />
         </FormGroup>
       </CardContent>
-      <CardActions>{children}</CardActions>
     </Card>
   );
 };

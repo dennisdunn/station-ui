@@ -1,18 +1,23 @@
 import {
   AppBar,
-  Button,
+  Drawer,
   Grid,
+  Icon,
+  IconButton,
   makeStyles,
   Toolbar,
   Typography,
+  List,
+  ListItem,
+  Divider,
 } from "@material-ui/core";
 import React, { useState } from "react";
 import {
   callApi,
-  tunerDef,
   presets,
   StationInfo,
   Tuner,
+  tunerDefs,
   TunerDefEditor,
 } from "./components";
 
@@ -28,17 +33,40 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const [def, setTunerDef] = useState(tunerDef);
-  const [isOpen, setIsOpen] = useState(false);
+  const [def, setTunerDef] = useState(tunerDefs[0]);
+  const [showTunerDef, setShowTunerDef] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
 
   const sdrTune = (data) => {
     callApi({ url: def.controlUrl, method: "POST", data });
+  };
+
+  const mkDefinitionsList = (defs) => {
+    return defs.map((def, i) => (
+      <ListItem
+        key={i}
+        button
+        onClick={(e) => {
+          setTunerDef(def);
+          setShowDrawer(false);
+        }}
+      >
+        {def.label}
+      </ListItem>
+    ));
   };
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={() => setShowDrawer(true)}
+          >
+            <Icon>menu</Icon>
+          </IconButton>
           <Typography className={classes.title} variant="h6">
             Ground Station Control
           </Typography>
@@ -47,17 +75,34 @@ function App() {
       </AppBar>
       <Grid className={classes.content} container spacing={2}>
         <Grid item>
-          <Tuner config={def} presets={presets} onChange={sdrTune}>
-            <Button onClick={() => setIsOpen(true)}>Edit</Button>
-          </Tuner>
+          <Tuner config={def} presets={presets} onChange={sdrTune} />
         </Grid>
       </Grid>
       <TunerDefEditor
-        isOpen={isOpen}
-        data={def}
+        isOpen={showTunerDef}
         onSave={setTunerDef}
-        onClose={setIsOpen}
+        onClose={setShowTunerDef}
       />
+      <Drawer open={showDrawer} onClose={() => setShowDrawer(false)}>
+        <div className={classes.content}>
+          <Typography>Tuner Definitions</Typography>
+          <Divider />
+          <List>
+            <ListItem
+              button
+              onClick={() => {
+                setShowDrawer(false);
+                setShowTunerDef(true);
+              }}
+            >
+              <Typography variant="caption">
+                <em>New Tuner Definition...</em>
+              </Typography>
+            </ListItem>
+            {mkDefinitionsList(tunerDefs)}
+          </List>
+        </div>
+      </Drawer>
     </div>
   );
 }
