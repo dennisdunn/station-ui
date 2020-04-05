@@ -10,18 +10,18 @@ import {
   FormLabel,
   makeStyles,
   Switch,
-  TextField
+  TextField,
 } from "@material-ui/core";
 import React, { useState } from "react";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: { maxWidth: "40ch" },
   themed: {
-    margin: theme.spacing(1)
-  }
+    margin: theme.spacing(1),
+  },
 }));
 
-export const SdrEditor = ({ isOpen, data, onSave, onClose }) => {
+export const TunerDefEditor = ({ isOpen, data, onSave, onClose }) => {
   const [local, setLocal] = useState({ ...data, modes: new Set(data.modes) });
   const classes = useStyles();
 
@@ -30,7 +30,7 @@ export const SdrEditor = ({ isOpen, data, onSave, onClose }) => {
     setLocal(newState);
   };
 
-  const setMode = e => {
+  const setMode = (e) => {
     const modes = local.modes;
     if (e.target.checked) {
       modes.add(e.target.value);
@@ -47,39 +47,39 @@ export const SdrEditor = ({ isOpen, data, onSave, onClose }) => {
           className={classes.themed}
           label="Key"
           value={local.key}
-          onChange={e => updateState("key", e.target.value)}
+          onChange={(e) => updateState("key", e.target.value)}
         ></TextField>
         <TextField
           className={classes.themed}
           label="Label"
           value={local.label}
-          onChange={e => updateState("label", e.target.value)}
+          onChange={(e) => updateState("label", e.target.value)}
         ></TextField>
         <TextField
           className={classes.themed}
           label="Control URL"
           value={local.controlUrl}
-          onChange={e => updateState("controlUrl", e.target.value)}
+          onChange={(e) => updateState("controlUrl", e.target.value)}
         ></TextField>
         <TextField
           className={classes.themed}
           label="Audio URL"
           value={local.audioUrl}
-          onChange={e => updateState("audioUrl", e.target.value)}
+          onChange={(e) => updateState("audioUrl", e.target.value)}
         ></TextField>
         <TextField
           className={classes.themed}
           label="Band Start"
           value={local.minFreq}
           type="number"
-          onChange={e => updateState("minFreq", e.target.value)}
+          onChange={(e) => updateState("minFreq", e.target.value)}
         ></TextField>
         <TextField
           className={classes.themed}
           label="Band End"
           value={local.maxFreq}
           type="number"
-          onChange={e => updateState("maxFreq", e.target.value)}
+          onChange={(e) => updateState("maxFreq", e.target.value)}
         ></TextField>
         <FormControl className={classes.themed}>
           <FormLabel>Modes</FormLabel>
@@ -131,8 +131,8 @@ export const SdrEditor = ({ isOpen, data, onSave, onClose }) => {
               label="Show Squelch?"
               control={
                 <Switch
-                  checked={local.useSquelch}
-                  onChange={e => updateState("useSquelch", e.target.checked)}
+                  checked={local.showSquelch}
+                  onChange={(e) => updateState("showSquelch", e.target.checked)}
                 />
               }
             />
@@ -140,8 +140,8 @@ export const SdrEditor = ({ isOpen, data, onSave, onClose }) => {
               label="Show Gain?"
               control={
                 <Switch
-                  checked={local.useGain}
-                  onChange={e => updateState("useGain", e.target.checked)}
+                  checked={local.showGain}
+                  onChange={(e) => updateState("showGain", e.target.checked)}
                 />
               }
             />
@@ -149,8 +149,8 @@ export const SdrEditor = ({ isOpen, data, onSave, onClose }) => {
               label="Show AGC?"
               control={
                 <Switch
-                  checked={local.useAgc}
-                  onChange={e => updateState("useAgc", e.target.checked)}
+                  checked={local.showAgc}
+                  onChange={(e) => updateState("showAgc", e.target.checked)}
                 />
               }
             />
@@ -158,7 +158,13 @@ export const SdrEditor = ({ isOpen, data, onSave, onClose }) => {
         </FormControl>{" "}
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose(false)} color="secondary">
+        <Button
+          onClick={() => {
+            onClose(false);
+            setLocal(data);
+          }}
+          color="secondary"
+        >
           Cancel
         </Button>
         <Button

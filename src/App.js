@@ -8,12 +8,12 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import {
-  Sdr,
-  sdrConfig,
-  SdrEditor,
-  sdrSettings,
-  StationInfo,
   callApi,
+  tunerDef,
+  presets,
+  StationInfo,
+  Tuner,
+  TunerDefEditor,
 } from "./components";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,12 +28,11 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const [sdr, setSdr] = useState(sdrConfig);
-  const [settings, setSettings] = useState(sdrSettings);
+  const [def, setTunerDef] = useState(tunerDef);
   const [isOpen, setIsOpen] = useState(false);
 
   const sdrTune = (data) => {
-    callApi({ url: sdr.controlUrl, method: "POST", data });
+    callApi({ url: def.controlUrl, method: "POST", data });
   };
 
   return (
@@ -48,15 +47,15 @@ function App() {
       </AppBar>
       <Grid className={classes.content} container spacing={2}>
         <Grid item>
-          <Sdr config={sdr} settings={settings} onChange={sdrTune}>
+          <Tuner config={def} presets={presets} onChange={sdrTune}>
             <Button onClick={() => setIsOpen(true)}>Edit</Button>
-          </Sdr>
+          </Tuner>
         </Grid>
       </Grid>
-      <SdrEditor
+      <TunerDefEditor
         isOpen={isOpen}
-        data={sdr}
-        onSave={setSdr}
+        data={def}
+        onSave={setTunerDef}
         onClose={setIsOpen}
       />
     </div>
