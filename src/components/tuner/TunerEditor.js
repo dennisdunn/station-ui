@@ -13,7 +13,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { defaultTunerDefinition } from "../default.types";
+import { defaultTuner} from "../default.types";
 
 const useStyles = makeStyles((theme) => ({
   root: { maxWidth: "40ch" },
@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const TunerDefEditor = ({ isOpen, data, onSave, onClose }) => {
-  data = data || defaultTunerDefinition;
+export const TunerEditor = ({ isOpen, data, onSave, onClose }) => {
+  data = data || defaultTuner;
   const [local, setLocal] = useState({ ...data, modes: new Set(data.modes) });
   const classes = useStyles();
 

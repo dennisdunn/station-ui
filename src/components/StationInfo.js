@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { stationInfo as defaultStation } from "./default.types";
+import React, { useEffect, useState, Fragment } from "react";
+import { defaultStationInfo } from "./default.types";
 import { callApi } from "./services";
 
-export const StationInfo = ({ source }) => {
-  const [state, setState] = useState(defaultStation);
+export const StationInfo = ({ station }) => {
+  const [state, setState] = useState(defaultStationInfo);
 
   useEffect(() => {
-    callApi({ url: source }, ({ location }) => setState(location));
-  }, [source]);
+    callApi({ url: station }, ({ location }) => setState(location));
+  }, [station]);
 
   return (
-    <div>
+    <Fragment>
       {state.designation}&nbsp; Coord: {Number(state.lat)},{" "}
       {-1 * Number(state.lon)}&nbsp; Elev: {Number(state.elevation)} m
-    </div>
+    </Fragment>
   );
 };

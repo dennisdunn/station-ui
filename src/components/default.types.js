@@ -1,43 +1,4 @@
-export const tunerDefs = [
-  {
-    label: "FM Broadcast",
-    controlUrl: "http://localhost:1882/api/sdrs",
-    audioUrl: "http://localhost:8000/receiver.ogg",
-    minFreq: 88,
-    maxFreq: 107.9,
-    modes: new Set(["fm"]),
-    showGain: false,
-    showSquelch: false,
-    showAgc: false,
-    preset:'Flagstaff Favorites'
-  },
-  {
-    label: "FM Broadcast (Adv)",
-    controlUrl: "http://localhost:1882/api/sdrs",
-    audioUrl: "http://localhost:8000/receiver.ogg",
-    minFreq: 88,
-    maxFreq: 107.9,
-    modes: new Set(["fm"]),
-    showGain: true,
-    showSquelch: true,
-    showAgc: true,
-    preset:'Flagstaff Favorites'
-  },
-  {
-    label: "NOAA Weather Satellites",
-    controlUrl: "http://localhost:1882/api/sdrs",
-    audioUrl: "http://localhost:8000/receiver.ogg",
-    minFreq: 137.0,
-    maxFreq: 138.0,
-    modes: new Set(["fm"]),
-    showGain: true,
-    showSquelch: true,
-    showAgc: true,
-    preset:'NOAA Weather'
-  },
-];
-
-export const defaultTunerDefinition = {
+export const defaultTuner = {
   label: "",
   controlUrl: "",
   audioUrl: "",
@@ -47,39 +8,70 @@ export const defaultTunerDefinition = {
   showGain: false,
   showSquelch: false,
   showAgc: false,
+  presets:[]
 };
 
-export const station = {
-  label: "KJTA",
-  freq: 89.9,
+export const defaultTunerState = {
+  label: "",
+  freq: 0.5,
   mode: "fm",
   gain: "auto", // auto
   squelch: 0, // off
   agc: false,
 };
 
-export const presets = [
-  {
-    label: "Flagstaff Favorites",
-    stations: [
-      station,
-      { ...station, freq: 92.9, label: "KAFF" },
-      { ...station, freq: 88.7, label: "KNAU" },
-    ],
-  },
-  {
-    label: "NOAA Weather",
-    stations: [
-      { ...station, freq: 137.62, label: "NOAA 15" },
-      { ...station, freq: 137.9125, label: "NOAA 18" },
-      { ...station, freq: 137.1, label: "NOAA 19" },
-    ],
-  },
-];
-
-export const stationInfo = {
+export const defaultStationInfo = {
   designation: "",
   lat: "",
   lon: "",
   elevation: "",
 };
+
+export const tuners = [
+  {
+    label: "NOAA Weather Satellites",
+    controlUrl: "http://localhost:1882/api/sdrs",
+    audioUrl: "http://localhost:8000/receiver.ogg",
+    predictUrl: "http://localhost:1881/api/satellites",
+    minFreq: 137.0,
+    maxFreq: 138.0,
+    modes: new Set(["fm"]),
+    showGain: true,
+    showSquelch: true,
+    showAgc: true,
+    presets:[
+      { ...defaultTunerState, freq: 137.62, label: "NOAA 15" },
+      { ...defaultTunerState, freq: 137.9125, label: "NOAA 18" },
+      { ...defaultTunerState, freq: 137.1, label: "NOAA 19" },]
+  },
+  {
+    label: "FM Broadcast",
+    controlUrl: "http://localhost:1882/api/sdrs",
+    audioUrl: "http://localhost:8000/receiver.ogg",
+    predictUrl: "http://localhost:1881/api/satellites",
+    minFreq: 88,
+    maxFreq: 107.9,
+    modes: new Set(["fm"]),
+    showGain: false,
+    showSquelch: false,
+    showAgc: false,
+    presets: [
+      { ...defaultTunerState, freq: 89.9, label: "KJTA" },
+      { ...defaultTunerState, freq: 92.9, label: "KAFF" },
+      { ...defaultTunerState, freq: 88.7, label: "KNAU" },
+    ]
+  },
+  {
+    label: "FM Broadcast (Adv)",
+    controlUrl: "http://localhost:1882/api/sdrs",
+    audioUrl: "http://localhost:8000/receiver.ogg",
+    predictUrl: "http://localhost:1881/api/satellites",
+    minFreq: 88,
+    maxFreq: 107.9,
+    modes: new Set(["fm"]),
+    showGain: true,
+    showSquelch: true,
+    showAgc: true,
+    presets: []
+  },
+];

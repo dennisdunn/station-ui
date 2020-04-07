@@ -2,77 +2,45 @@ import {
   Button,
   ButtonGroup,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  FormControlLabel,
   Icon,
-  TextField,
+  Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { PresetEditor } from "./PresetEditor";
 
-export const TunerPresets = ({
-  visible,
-  presets,
-  onSelected,
-  onAddStation,
-}) => {
+export const TunerPresets = ({ presets, onSelected, onNew }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [local, setLocal] = useState("");
 
-  return visible ? (
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
+
+  const mkAddLabel = () => {
+    return presets.length === 0 ? (
+      <Typography variant="caption">
+        <em>Add preset...</em>
+      </Typography>
+    ) : (
+      <Icon>add</Icon>
+    );
+  };
+  return (
     <Container>
-      <FormControlLabel
-        label={presets.label}
-        labelPlacement="top"
-        control={
-          <ButtonGroup>
-            {presets.stations.map((station, i) => (
-              <Button
-                key={i}
-                variant="text"
-                value={station}
-                onClick={() => onSelected(station)}
-              >
-                {station.label}
-              </Button>
-            ))}
-            <Button key={99} variant="text" onClick={() => setIsOpen(true)}>
-              <Icon>add</Icon>
-            </Button>
-          </ButtonGroup>
-        }
-      />
-      <Dialog open={isOpen}>
-        <DialogContent>
-          <TextField
-            label="Station Label"
-            value={local}
-            onChange={(e) => setLocal(e.target.value)}
-          ></TextField>
-        </DialogContent>
-        <DialogActions>
+      <ButtonGroup>
+        {presets.map((preset, i) => (
           <Button
-            onClick={() => {
-              setIsOpen(false);
-              setLocal("");
-            }}
-            color="secondary"
+            key={i}
+            variant="text"
+            value={preset}
+            onClick={() => onSelected(preset)}
           >
-            Cancel
+            {preset.label}
           </Button>
-          <Button
-            onClick={() => {
-              setIsOpen(false);
-              onAddStation(local);
-              setLocal("");
-            }}
-            color="primary"
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+        ))}
+        <Button key={99} variant="text" onClick={open}>
+          {mkAddLabel()}
+        </Button>
+      </ButtonGroup>
+      <PresetEditor isOpen={isOpen} onSave={onNew} onClose={close} />
     </Container>
-  ) : null;
+  );
 };

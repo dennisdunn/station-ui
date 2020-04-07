@@ -1,6 +1,6 @@
-import { MenuItem } from '@material-ui/core';
+import { MenuItem } from "@material-ui/core";
 import axios from "axios";
-import React from 'react';
+import React from "react";
 
 // network helpers
 
@@ -10,16 +10,16 @@ export const callApi = (options, onData) => {
     callback(data);
   }
 
-  const callback = data => {
-    if (typeof (onData) === 'function') onData(data);
-  }
+  const callback = (data) => {
+    if (typeof onData === "function") onData(data);
+  };
 
   const valid =
     !options.url.endsWith("/") && options.url.lastIndexOf("//") === 5;
   if (valid) {
     fetchdata();
   } else {
-    callback(undefined)
+    callback(undefined);
   }
 };
 
@@ -30,6 +30,10 @@ export const saveSdrSettings = (data) => {
 // control helpers
 
 // make menu items from key-value pairs.
-export const mkMenuItems = kvps => {
-  return kvps.map((kvp, i) => <MenuItem key={i} value={kvp.value}>{kvp.key}</MenuItem>)
-}
+export const mkMenuItems = (kvps) => {
+  return kvps.map((kvp, i) => (
+    <MenuItem key={i} value={kvp.value}>
+      {kvp.key}
+    </MenuItem>
+  ));
+};

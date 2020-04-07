@@ -7,17 +7,20 @@ import {
   makeStyles,
   Toolbar,
   Typography,
+  Box,
 } from "@material-ui/core";
 import React, { useState } from "react";
 import {
   callApi,
   NavList,
   NavListItem,
-  presets,
+  SatellitePicker,
+  SatelliteStatus,
+  StationClock,
   StationInfo,
   Tuner,
-  TunerDefEditor,
-  tunerDefs,
+  TunerEditor,
+  tuners,
 } from "./components";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,20 +28,23 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   title: {
+    display: "flex",
     flexGrow: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   content: { margin: theme.spacing(1) },
 }));
 
 function App() {
   const classes = useStyles();
-  const [def, setTunerDef] = useState(tunerDefs[0]);
-  const [preset, setPreset] = useState(presets[0]);
-  const [showTunerDef, setShowTunerDef] = useState(false);
-  const [showDrawer, setShowDrawer] = useState(false);
+  const [satellite, setSatellite] = useState();
+  const [tuner, setTuner] = useState(tuners[0]);
+  const [showNavDrawer, setShowNavDrawer] = useState(false);
+  const [showTunerEditor, setShowTunerEditor] = useState(false);
 
   const sdrTune = (data) => {
-    callApi({ url: def.controlUrl, method: "POST", data });
+    callApi({ url: tuner.controlUrl, method: "POST", data });
   };
 
   return (
@@ -48,60 +54,61 @@ function App() {
           <IconButton
             edge="start"
             color="inherit"
-            onClick={() => setShowDrawer(true)}
+            onClick={() => setShowNavDrawer(true)}
           >
             <Icon>menu</Icon>
           </IconButton>
-          <Typography className={classes.title} variant="h6">
-            Ground Station Control
-          </Typography>
-          <StationInfo source="http://localhost:1881/api/sys/qth" />
+          <div className={classes.title}>
+            <Typography variant="h6">Ground Station Control</Typography>
+            <StationClock />
+            <StationInfo station="http://localhost:1881/api/sys/qth" />
+          </div>
         </Toolbar>
       </AppBar>
       <Grid className={classes.content} container spacing={2}>
         <Grid item>
-          <Tuner config={def} presets={preset} onChange={sdrTune} />
+          <Tuner definition={tuner} onTune={sdrTune} onChange={setTuner} />
+        </Grid>
+        <Grid item>
+          <SatellitePicker
+            value={satellite}
+            src={tuner.predictUrl}
+            onChange={setSatellite}
+          />
+        </Grid>
+        <Grid item>
+          <SatelliteStatus
+            name={satellite}
+            src={tuner.predictUrl}
+          ></SatelliteStatus>
         </Grid>
       </Grid>
-      <Drawer open={showDrawer} onClose={() => setShowDrawer(false)}>
+      <Drawer open={showNavDrawer} onClose={() => setShowNavDrawer(false)}>
         <div className={classes.content}>
           <NavList
             title="Tuner Definitions"
             onNew={() => {
-              setShowDrawer(false);
-              setShowTunerDef(true);
+              setShowNavDrawer(false);
+              setShowTunerEditor(true);
             }}
           >
-            {tunerDefs.map((v, i) => (
+            {tuners.map((v, i) => (
               <NavListItem
                 key={i}
                 value={v}
                 onClick={(v) => {
-                  setShowDrawer(false);
-                  setTunerDef(v);
-                  setPreset(presets.find((p) => p.label === v.preset));
-                }}
-              />
-            ))}
-          </NavList>
-          <NavList title="Presets" onNew={() => setShowDrawer(false)}>
-            {presets.map((v, i) => (
-              <NavListItem
-                key={i}
-                value={v}
-                onClick={(v) => {
-                  setShowDrawer(false);
-                  setPreset(v);
+                  setShowNavDrawer(false);
+                  setTuner(v);
                 }}
               />
             ))}
           </NavList>
         </div>
       </Drawer>
-      <TunerDefEditor
-        isOpen={showTunerDef}
-        onSave={setTunerDef}
-        onClose={setShowTunerDef}
+      <TunerEditor
+        isOpen={showTunerEditor}
+        onSave={setTuner}
+        onClose={setShowTunerEditor}
       />
     </div>
   );
