@@ -8,10 +8,6 @@ const useStyles = makeStyles((theme) => ({
   root: { maxWidth: "40ch", minWidth: "25ch" },
 }));
 
-const valueFormatters = {
-  nextEvent: (x) =>
-    new Date(x * 1e3).toISOString().replace("T", " ").replace(".000", ""),
-};
 export const SatelliteStatus = ({ name, src }) => {
   const classes = useStyles();
   const [state, setState] = useState({});
@@ -20,11 +16,18 @@ export const SatelliteStatus = ({ name, src }) => {
     callApi({ url: `${src}/${name}` }, setState);
   }, [name, src]);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      callApi({ url: `${src}/${name}` }, setState);
+    }, 60000);
+    return () => clearInterval(timer);
+  });
+
   return (
     <Card className={classes.root}>
       <CardContent>
         <Typography gutterBottom>Status</Typography>
-        <PropertyList data={format(state, valueFormatters)} />
+        <PropertyList data={format(state)} />
       </CardContent>
     </Card>
   );

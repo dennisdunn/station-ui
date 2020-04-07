@@ -11,7 +11,26 @@ export const toLabel = (str) => {
     .join(" ");
 };
 
-export const format = (data, formatters = {}) => {
+export const valueFormatters = {
+  nextEvent: (x) =>
+    new Date(x * 1e3)
+      .toISOString()
+      .replace("T", " ")
+      .replace(".000", "")
+      .replace("Z", " UTC"),
+  deltat: (x) => {
+    const delta = new Date(x);
+    return `${delta
+      .getUTCHours()
+      .toString()
+      .padStart(2, "0")}:${delta
+      .getUTCMinutes()
+      .toString()
+      .padStart(2, "0")}:${delta.getUTCSeconds().toString().padStart(2, "0")}`;
+  },
+};
+
+export const format = (data, formatters = valueFormatters) => {
   const formatted = {};
   Object.keys(data).forEach((k) => {
     const key = toLabel(k);

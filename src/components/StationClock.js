@@ -24,11 +24,11 @@ export const StationClock = () => {
 
   return (
     <Fragment>
-      <Typography variant="body">
+      <Typography>
         Local: {localTime.toLocaleDateString()},{" "}
         {trimLocalTime(localTime.toLocaleTimeString())}
       </Typography>{" "}
-      <Typography variant="body">
+      <Typography>
         UTC: {localTime.toISOString().split("T")[0]}{" "}
         {trimTime(localTime.toISOString().split("T")[1])}
       </Typography>

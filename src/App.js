@@ -7,14 +7,13 @@ import {
   makeStyles,
   Toolbar,
   Typography,
-  Box,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   callApi,
   NavList,
   NavListItem,
-  SatellitePicker,
+  SatelliteEvents,
   SatelliteStatus,
   StationClock,
   StationInfo,
@@ -39,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const [satellite, setSatellite] = useState();
+  const [satellites, setSatellites] = useState([]);
   const [tuner, setTuner] = useState(tuners[0]);
   const [showNavDrawer, setShowNavDrawer] = useState(false);
   const [showTunerEditor, setShowTunerEditor] = useState(false);
@@ -46,6 +46,10 @@ function App() {
   const sdrTune = (data) => {
     callApi({ url: tuner.controlUrl, method: "POST", data });
   };
+
+  useEffect(() => {
+    callApi({ url: tuner.predictUrl }, setSatellites);
+  }, [tuner.predictUrl]);
 
   return (
     <div className={classes.root}>
@@ -70,17 +74,14 @@ function App() {
           <Tuner definition={tuner} onTune={sdrTune} onChange={setTuner} />
         </Grid>
         <Grid item>
-          <SatellitePicker
-            value={satellite}
-            src={tuner.predictUrl}
-            onChange={setSatellite}
-          />
+          <SatelliteStatus name={satellite} src={tuner.predictUrl} />
         </Grid>
         <Grid item>
-          <SatelliteStatus
-            name={satellite}
+          <SatelliteEvents
             src={tuner.predictUrl}
-          ></SatelliteStatus>
+            data={satellites}
+            onSelected={setSatellite}
+          />
         </Grid>
       </Grid>
       <Drawer open={showNavDrawer} onClose={() => setShowNavDrawer(false)}>

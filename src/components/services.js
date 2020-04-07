@@ -7,20 +7,11 @@ import React from "react";
 export const callApi = (options, onData) => {
   async function fetchdata() {
     const { data } = await axios(options);
-    callback(data);
+    if (typeof onData === "function") {
+      onData(data);
+    }
   }
-
-  const callback = (data) => {
-    if (typeof onData === "function") onData(data);
-  };
-
-  const valid =
-    !options.url.endsWith("/") && options.url.lastIndexOf("//") === 5;
-  if (valid) {
-    fetchdata();
-  } else {
-    callback(undefined);
-  }
+  fetchdata();
 };
 
 export const saveSdrSettings = (data) => {
