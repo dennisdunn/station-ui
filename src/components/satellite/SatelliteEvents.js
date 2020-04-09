@@ -5,6 +5,7 @@ import {
   Table,
   TableBody,
   Typography,
+  TableContainer,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { callApi } from "../services";
@@ -39,16 +40,18 @@ export const SatelliteEvents = ({ src, onSelected }) => {
     <Card className={classes.root}>
       <CardContent>
         <Typography gutterBottom>AOS</Typography>
-        <Table padding="checkbox">
-          <TableBody>
-            {state
-              .filter((x) => x.nextEvent > 0)
-              .sort((a, b) => a.nextEvent - b.nextEvent)
-              .map((x, i) => (
-                <SatelliteEventRow data={x} key={i} onClick={onSelected} />
-              ))}
-          </TableBody>
-        </Table>
+        <TableContainer style={{maxHeight:400}}>
+          <Table padding="checkbox">
+            <TableBody>
+              {state
+                .filter((x) => x.nextEvent > 0)
+                .sort((a, b) => a.nextEvent - b.nextEvent)
+                .map((x, i) => (
+                  <SatelliteEventRow data={x} key={i} onClick={onSelected} />
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </CardContent>
     </Card>
   );

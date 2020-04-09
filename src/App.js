@@ -11,10 +11,10 @@ import {
 import React, { useEffect, useState } from "react";
 import {
   callApi,
+  ElAz,
   NavList,
   NavListItem,
   SatelliteEvents,
-  PolarChart,
   SatelliteStatus,
   StationClock,
   StationInfo,
@@ -43,7 +43,7 @@ function App() {
   const [tuner, setTuner] = useState(tuners[0]);
   const [showNavDrawer, setShowNavDrawer] = useState(false);
   const [showTunerEditor, setShowTunerEditor] = useState(false);
-  const [passData, setPassData] = useState();
+  const [passData, setPassData] = useState([]);
 
   const sdrTune = (data) => {
     callApi({ url: tuner.controlUrl, method: "POST", data });
@@ -55,7 +55,7 @@ function App() {
 
   useEffect(() => {
     if (satellite)
-        callApi({ url: `${tuner.predictUrl}/${satellite}/predict` }, setPassData);
+      callApi({ url: `${tuner.predictUrl}/${satellite}/predict` }, setPassData);
   }, [tuner.predictUrl, satellite]);
 
   useEffect(() => {
@@ -86,12 +86,6 @@ function App() {
       </AppBar>
       <Grid className={classes.content} container spacing={2}>
         <Grid item>
-          <Tuner definition={tuner} onTune={sdrTune} onChange={setTuner} />
-        </Grid>
-        <Grid item>
-          <SatelliteStatus name={satellite} src={tuner.predictUrl} />
-        </Grid>
-        <Grid item>
           <SatelliteEvents
             src={tuner.predictUrl}
             data={satellites}
@@ -99,7 +93,13 @@ function App() {
           />
         </Grid>
         <Grid item>
-          <PolarChart satellite={satellite} data={passData} />
+          <SatelliteStatus name={satellite} src={tuner.predictUrl} />
+        </Grid>
+        <Grid item>
+          <ElAz data={passData} name={satellite} />
+        </Grid>
+        <Grid item>
+          <Tuner definition={tuner} onTune={sdrTune} onChange={setTuner} />
         </Grid>
       </Grid>
       <Drawer open={showNavDrawer} onClose={() => setShowNavDrawer(false)}>

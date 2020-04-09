@@ -23,11 +23,15 @@ export const SatelliteStatus = ({ name, src }) => {
     return () => clearInterval(timer);
   });
 
+  const info = { ...state };
+  delete info.name;
+  delete info.nextEvent;
+
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Typography gutterBottom>Satellite</Typography>
-        {state.name!=='Huh?'?( <PropertyList data={format(state)} />):null}     
+        <Typography gutterBottom>{name || "Satellite"}</Typography>
+        {name ? <PropertyList data={format(info)} /> : null}
       </CardContent>
     </Card>
   );

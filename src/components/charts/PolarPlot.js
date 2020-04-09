@@ -33,7 +33,7 @@ const path = (options, data) => {
   );
 };
 
-export const PolarChart = ({ options, data }) => {
+export const PolarPlot = ({ options, data }) => {
   const points = data.map(polarToCartesian);
 
   const groups = [];
@@ -63,4 +63,4 @@ export const PolarChart = ({ options, data }) => {
   );
 };
 
-export default PolarChart;
+export default PolarPlot;
