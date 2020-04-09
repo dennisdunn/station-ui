@@ -13,12 +13,13 @@ export const toLabel = (str) => {
 
 export const valueFormatters = {
   nextEvent: (x) =>
-    new Date(x * 1e3)
+    new Date(x)
       .toISOString()
       .replace("T", " ")
       .replace(".000", "")
       .replace("Z", " UTC"),
   deltat: (x) => {
+    if(x<0)return '00:00:00';
     const delta = new Date(x);
     return `${delta
       .getUTCHours()

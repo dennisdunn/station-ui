@@ -8,7 +8,7 @@ export const defaultTuner = {
   showGain: false,
   showSquelch: false,
   showAgc: false,
-  presets:[]
+  presets: [],
 };
 
 export const defaultTunerState = {
@@ -29,22 +29,6 @@ export const defaultStationInfo = {
 
 export const tuners = [
   {
-    label: "NOAA Weather Satellites",
-    controlUrl: "http://localhost:1882/api/sdrs",
-    audioUrl: "http://localhost:8000/receiver.ogg",
-    predictUrl: "http://localhost:1881/api/satellites",
-    minFreq: 137.0,
-    maxFreq: 138.0,
-    modes: new Set(["fm"]),
-    showGain: true,
-    showSquelch: true,
-    showAgc: true,
-    presets:[
-      { ...defaultTunerState, freq: 137.62, label: "NOAA 15" },
-      { ...defaultTunerState, freq: 137.9125, label: "NOAA 18" },
-      { ...defaultTunerState, freq: 137.1, label: "NOAA 19" },]
-  },
-  {
     label: "FM Broadcast",
     controlUrl: "http://localhost:1882/api/sdrs",
     audioUrl: "http://localhost:8000/receiver.ogg",
@@ -59,7 +43,7 @@ export const tuners = [
       { ...defaultTunerState, freq: 89.9, label: "KJTA" },
       { ...defaultTunerState, freq: 92.9, label: "KAFF" },
       { ...defaultTunerState, freq: 88.7, label: "KNAU" },
-    ]
+    ],
   },
   {
     label: "FM Broadcast (Adv)",
@@ -72,6 +56,61 @@ export const tuners = [
     showGain: true,
     showSquelch: true,
     showAgc: true,
-    presets: []
+    presets: [],
+  },
+  {
+    label: "NOAA-15",
+    controlUrl: "http://localhost:1882/api/sdrs",
+    audioUrl: "http://localhost:8000/receiver.ogg",
+    predictUrl: "http://localhost:1881/api/satellites",
+    minFreq: 137.0,
+    maxFreq: 138.0,
+    modes: new Set(["fm"]),
+    showGain: true,
+    showSquelch: true,
+    showAgc: true,
+    current: {
+      freq: 137.62,
+      mode: "fm",
+      gain: "auto", // auto
+      squelch: 0, // off
+      agc: false,
+    },
+  },
+  {
+    label: "default",
+    controlUrl: "http://localhost:1882/api/sdrs",
+    audioUrl: "http://localhost:8000/receiver.ogg",
+    predictUrl: "http://localhost:1881/api/satellites",
+    minFreq: 0.5,
+    maxFreq: 1750,
+    modes: new Set(["fm"]),
+    showGain: true,
+    showSquelch: true,
+    showAgc: true,
+    current: {
+      freq: 1019,
+      mode: "fm",
+      gain: "auto", // auto
+      squelch: 0, // off
+      agc: false,
+    },
+  },
+  {
+    label: "NOAA Weather Satellites",
+    controlUrl: "http://localhost:1882/api/sdrs",
+    audioUrl: "http://localhost:8000/receiver.ogg",
+    predictUrl: "http://localhost:1881/api/satellites",
+    minFreq: 137.0,
+    maxFreq: 138.0,
+    modes: new Set(["fm"]),
+    showGain: true,
+    showSquelch: true,
+    showAgc: true,
+    presets: [
+      { ...defaultTunerState, freq: 137.62, label: "NOAA 15" },
+      { ...defaultTunerState, freq: 137.9125, label: "NOAA 18" },
+      { ...defaultTunerState, freq: 137.1, label: "NOAA 19" },
+    ],
   },
 ];

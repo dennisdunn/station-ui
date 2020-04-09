@@ -4,7 +4,7 @@ import { valueFormatters } from "./services";
 
 export const SatelliteEventRow = ({ data, key, onClick }) => {
   const delta = valueFormatters["deltat"](
-    data.nextEvent * 1e3 - Date.now().valueOf()
+    data.nextEvent - Date.now().valueOf()
   );
   return (
     <TableRow key={key}>

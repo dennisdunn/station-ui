@@ -8,7 +8,7 @@ import {
 import React, { useState } from "react";
 import { PresetEditor } from "./PresetEditor";
 
-export const TunerPresets = ({ presets, onSelected, onNew }) => {
+export const TunerPresets = ({ visible, presets, onSelected, onNew }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const open = () => setIsOpen(true);
@@ -23,7 +23,7 @@ export const TunerPresets = ({ presets, onSelected, onNew }) => {
       <Icon>add</Icon>
     );
   };
-  return (
+  return visible ? (
     <Container>
       <ButtonGroup>
         {presets.map((preset, i) => (
@@ -42,5 +42,5 @@ export const TunerPresets = ({ presets, onSelected, onNew }) => {
       </ButtonGroup>
       <PresetEditor isOpen={isOpen} onSave={onNew} onClose={close} />
     </Container>
-  );
+  ) : null;
 };

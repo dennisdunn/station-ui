@@ -1,5 +1,7 @@
 import {
+  Button,
   Card,
+  CardActions,
   CardContent,
   FormGroup,
   makeStyles,
@@ -15,6 +17,7 @@ import {
   SquelchSlider,
   TunerPresets,
 } from ".";
+import { Fragment } from "react";
 
 const defaultState = {
   label: "",
@@ -35,10 +38,29 @@ export const Tuner = ({ definition, onTune, onChange }) => {
   const [current, setCurrent] = useState(defaultState);
 
   useEffect(() => {
-    setCurrent(
-      definition.presets[0] || { ...defaultState, freq: definition.minFreq }
-    );
+    setCurrent(getInitialState(definition));
   }, [definition]);
+
+  const getInitialState = (def) => {
+    if (def.presets && def.presets.length > 0) {
+      return def.presets[0];
+    } else {
+      if (def.current) {
+        return def.current;
+      } else {
+        return { ...defaultState, freq: def.minFreq };
+      }
+    }
+  };
+
+  const reset = () => {
+    setCurrent(getInitialState(definition));
+  };
+
+  const save = () => {
+    definition.current = current;
+    onChange(definition);
+  };
 
   const updateState = (kvp) => {
     setCurrent({ ...current, ...kvp });
@@ -72,6 +94,7 @@ export const Tuner = ({ definition, onTune, onChange }) => {
             onCommited={onTune}
           />
           <TunerPresets
+            visible={definition.presets}
             presets={definition.presets}
             onSelected={setCurrent}
             onNew={addPreset}
@@ -99,6 +122,19 @@ export const Tuner = ({ definition, onTune, onChange }) => {
           <AudioStreamer enabled source={definition.audioUrl} />
         </FormGroup>
       </CardContent>
+      <CardActions>
+        {!definition.presets ? (
+          <Fragment>
+            {" "}
+            <Button onClick={reset} size="small" color="secondary">
+              Reset
+            </Button>
+            <Button onClick={save} size="small" color="primary">
+              Save
+            </Button>
+          </Fragment>
+        ) : null}
+      </CardActions>
     </Card>
   );
 };

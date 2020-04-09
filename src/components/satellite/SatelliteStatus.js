@@ -26,8 +26,8 @@ export const SatelliteStatus = ({ name, src }) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Typography gutterBottom>Status</Typography>
-        <PropertyList data={format(state)} />
+        <Typography gutterBottom>Satellite</Typography>
+        {state.name!=='Huh?'?( <PropertyList data={format(state)} />):null}     
       </CardContent>
     </Card>
   );

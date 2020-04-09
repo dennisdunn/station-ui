@@ -14,6 +14,7 @@ import {
   NavList,
   NavListItem,
   SatelliteEvents,
+  PolarChart,
   SatelliteStatus,
   StationClock,
   StationInfo,
@@ -42,6 +43,7 @@ function App() {
   const [tuner, setTuner] = useState(tuners[0]);
   const [showNavDrawer, setShowNavDrawer] = useState(false);
   const [showTunerEditor, setShowTunerEditor] = useState(false);
+  const [passData, setPassData] = useState();
 
   const sdrTune = (data) => {
     callApi({ url: tuner.controlUrl, method: "POST", data });
@@ -50,6 +52,19 @@ function App() {
   useEffect(() => {
     callApi({ url: tuner.predictUrl }, setSatellites);
   }, [tuner.predictUrl]);
+
+  useEffect(() => {
+    if (satellite)
+        callApi({ url: `${tuner.predictUrl}/${satellite}/predict` }, setPassData);
+  }, [tuner.predictUrl, satellite]);
+
+  useEffect(() => {
+    let satTuner = tuners.find((x) => x.label === satellite);
+    if (!satTuner) {
+      satTuner = tuners.find((x) => x.label === "default");
+    }
+    setTuner(() => ({ ...satTuner, label: satellite }));
+  }, [satellite]);
 
   return (
     <div className={classes.root}>
@@ -82,6 +97,9 @@ function App() {
             data={satellites}
             onSelected={setSatellite}
           />
+        </Grid>
+        <Grid item>
+          <PolarChart satellite={satellite} data={passData} />
         </Grid>
       </Grid>
       <Drawer open={showNavDrawer} onClose={() => setShowNavDrawer(false)}>
