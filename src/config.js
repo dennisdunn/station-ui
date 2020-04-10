@@ -1,5 +1,5 @@
 export const cfg = {
-  // stationAddr: "black.local",
+  host: "black.local",
   sdr: "http://{addr}:1882/api",
   audio: "http://{addr}:8000",
   predict: "http://{addr}:1881/api",
@@ -10,7 +10,7 @@ export const cfg = {
 
 export const getUrl = (key, ...paths) => {
   const components = [
-    cfg[key].replace("{addr}", cfg.stationAddr || "localhost"),
+    cfg[key].replace("{addr}", cfg.host|| "localhost"),
   ].concat(paths);
   return components.join("/");
 };

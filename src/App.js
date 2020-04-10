@@ -15,8 +15,8 @@ import {
 import React, { useEffect, useState } from "react";
 import {
   AudioCard,
+  AzumithChart,
   callApi,
-  ElAz,
   SatelliteEvents,
   SatelliteStatus,
   StationClock,
@@ -104,13 +104,17 @@ function App() {
           <SatelliteStatus url={getUrl("predict", "satellites", satellite)} />
         </Grid>
         <Grid item>
-          <ElAz name={satellite} data={passData} />
+          <AzumithChart name={satellite} data={passData} />
         </Grid>
         <Grid item>
           <Tuner definition={tuner} onTune={sdrTune} onChange={setTuner} />
         </Grid>
         <Grid item>
-          <AudioCard url={getUrl("audio", "receiver.ogg")} />
+          <AudioCard
+            url={getUrl("audio", "receiver.ogg")}
+            variant="contained"
+            color="primary"
+          />
         </Grid>
       </Grid>
       <Drawer open={showNavDrawer} onClose={() => setShowNavDrawer(false)}>

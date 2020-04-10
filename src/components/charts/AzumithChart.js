@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { Sunchart } from "../charts";
+import { Sunchart } from ".";
 
 const useStyles = makeStyles((theme) => ({
   root: { maxWidth: "40ch", minWidth: "25ch" },
@@ -24,7 +24,7 @@ const format = (timestamp) => {
     .replace(".000", "");
 };
 
-export const ElAz = ({ name, data = [] }) => {
+export const AzumithChart = ({ name, data = [] }) => {
   const classes = useStyles();
 
   return (

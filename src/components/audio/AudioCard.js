@@ -7,12 +7,12 @@ const useStyles = makeStyles((theme) => ({
   cardControls: { display: "flex", justifyItems: "end" },
 }));
 
-export const AudioCard = ({ url }) => {
+export const AudioCard = ({ url, ...rest }) => {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
       <CardContent>
-        <StreamPlayer url={url} variant="contained" />
+        <StreamPlayer url={url} {...rest} />
       </CardContent>
     </Card>
   );
