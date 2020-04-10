@@ -1,7 +1,5 @@
 export const defaultTuner = {
   label: "",
-  controlUrl: "",
-  audioUrl: "",
   minFreq: 0.5,
   maxFreq: 1750,
   modes: new Set(),
@@ -30,9 +28,6 @@ export const defaultStationInfo = {
 export const tuners = [
   {
     label: "FM Broadcast",
-    controlUrl: "http://localhost:1882/api/sdrs",
-    audioUrl: "http://localhost:8000/receiver.ogg",
-    predictUrl: "http://localhost:1881/api/satellites",
     minFreq: 88,
     maxFreq: 107.9,
     modes: new Set(["fm"]),
@@ -47,9 +42,6 @@ export const tuners = [
   },
   {
     label: "FM Broadcast (Adv)",
-    controlUrl: "http://localhost:1882/api/sdrs",
-    audioUrl: "http://localhost:8000/receiver.ogg",
-    predictUrl: "http://localhost:1881/api/satellites",
     minFreq: 88,
     maxFreq: 107.9,
     modes: new Set(["fm"]),
@@ -60,9 +52,6 @@ export const tuners = [
   },
   {
     label: "NOAA-15",
-    controlUrl: "http://localhost:1882/api/sdrs",
-    audioUrl: "http://localhost:8000/receiver.ogg",
-    predictUrl: "http://localhost:1881/api/satellites",
     minFreq: 137.0,
     maxFreq: 138.0,
     modes: new Set(["fm"]),
@@ -79,9 +68,6 @@ export const tuners = [
   },
   {
     label: "default",
-    controlUrl: "http://localhost:1882/api/sdrs",
-    audioUrl: "http://localhost:8000/receiver.ogg",
-    predictUrl: "http://localhost:1881/api/satellites",
     minFreq: 0.5,
     maxFreq: 1750,
     modes: new Set(["fm"]),
@@ -98,9 +84,6 @@ export const tuners = [
   },
   {
     label: "NOAA Weather Satellites",
-    controlUrl: "http://localhost:1882/api/sdrs",
-    audioUrl: "http://localhost:8000/receiver.ogg",
-    predictUrl: "http://localhost:1881/api/satellites",
     minFreq: 137.0,
     maxFreq: 138.0,
     modes: new Set(["fm"]),

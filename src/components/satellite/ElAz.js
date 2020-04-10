@@ -30,7 +30,7 @@ export const ElAz = ({ name, data = [] }) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Typography gutterBottom>{name || "El-Az Plot"}</Typography>
+        <Typography gutterBottom>{name || "Azumith Plot"}</Typography>
         <Sunchart
           options={{ size: 200, numScales: 3, stroke: "red" }}
           data={data}
@@ -43,15 +43,15 @@ export const ElAz = ({ name, data = [] }) => {
           <Table padding="checkbox" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>El</TableCell>
                 <TableCell>Az</TableCell>
+                <TableCell>El</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {data.map((d) => (
                 <TableRow>
-                  <TableCell>{d.el}</TableCell>
                   <TableCell>{d.az}</TableCell>
+                  <TableCell>{d.el}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

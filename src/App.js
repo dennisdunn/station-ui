@@ -1,27 +1,32 @@
 import {
   AppBar,
+  Button,
+  Divider,
   Drawer,
   Grid,
   Icon,
   IconButton,
+  List,
+  ListItem,
   makeStyles,
   Toolbar,
   Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import {
+  AudioCard,
   callApi,
   ElAz,
-  NavList,
-  NavListItem,
   SatelliteEvents,
   SatelliteStatus,
   StationClock,
   StationInfo,
+  StreamPlayer,
   Tuner,
   TunerEditor,
   tuners,
 } from "./components";
+import { getUrl } from "./config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,17 +51,20 @@ function App() {
   const [passData, setPassData] = useState([]);
 
   const sdrTune = (data) => {
-    callApi({ url: tuner.controlUrl, method: "POST", data });
+    callApi({ url: getUrl("sdr", "sdrs"), method: "POST", data });
   };
 
   useEffect(() => {
-    callApi({ url: tuner.predictUrl }, setSatellites);
-  }, [tuner.predictUrl]);
+    callApi({ url: getUrl("predict", "satellites") }, setSatellites);
+  }, []);
 
   useEffect(() => {
     if (satellite)
-      callApi({ url: `${tuner.predictUrl}/${satellite}/predict` }, setPassData);
-  }, [tuner.predictUrl, satellite]);
+      callApi(
+        { url: getUrl("predict", "satellites", satellite, "predict") },
+        setPassData
+      );
+  }, [satellite]);
 
   useEffect(() => {
     let satTuner = tuners.find((x) => x.label === satellite);
@@ -80,31 +88,60 @@ function App() {
           <div className={classes.title}>
             <Typography variant="h6">Ground Station Control</Typography>
             <StationClock />
-            <StationInfo station="http://localhost:1881/api/sys/qth" />
+            <StationInfo url={getUrl("predict", "sys", "location")} />
           </div>
         </Toolbar>
       </AppBar>
       <Grid className={classes.content} container spacing={2}>
         <Grid item>
           <SatelliteEvents
-            src={tuner.predictUrl}
+            url={getUrl("predict", "events?fields=name,nextEvent")}
             data={satellites}
             onSelected={setSatellite}
           />
         </Grid>
         <Grid item>
-          <SatelliteStatus name={satellite} src={tuner.predictUrl} />
+          <SatelliteStatus url={getUrl("predict", "satellites", satellite)} />
         </Grid>
         <Grid item>
-          <ElAz data={passData} name={satellite} />
+          <ElAz name={satellite} data={passData} />
         </Grid>
         <Grid item>
           <Tuner definition={tuner} onTune={sdrTune} onChange={setTuner} />
         </Grid>
+        <Grid item>
+          <AudioCard url={getUrl("audio", "receiver.ogg")} />
+        </Grid>
       </Grid>
       <Drawer open={showNavDrawer} onClose={() => setShowNavDrawer(false)}>
         <div className={classes.content}>
-          <NavList
+          <Typography>Tools</Typography>
+          <Divider />
+          <List>
+            <ListItem>
+              <Button href={getUrl("sdrAdmin")} target="_blank" size="small">
+                SDR API
+              </Button>
+            </ListItem>
+            <ListItem>
+              <Button
+                href={getUrl("predictAdmin")}
+                target="_blank"
+                size="small"
+              >
+                Predict API
+              </Button>
+            </ListItem>
+            <ListItem>
+              <Button href={getUrl("audioAdmin")} target="_blank" size="small">
+                Audio streams
+              </Button>
+            </ListItem>
+            <ListItem>
+              <StreamPlayer url={getUrl("audio", "tone")} />
+            </ListItem>
+          </List>
+          {/* <NavList
             title="Tuner Definitions"
             onNew={() => {
               setShowNavDrawer(false);
@@ -121,7 +158,7 @@ function App() {
                 }}
               />
             ))}
-          </NavList>
+          </NavList> */}
         </div>
       </Drawer>
       <TunerEditor

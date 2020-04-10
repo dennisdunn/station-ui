@@ -7,17 +7,15 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   AgcSwitch,
-  AudioStreamer,
   FrequencySlider,
   GainSlider,
   ModePicker,
   SquelchSlider,
   TunerPresets,
 } from ".";
-import { Fragment } from "react";
 
 const defaultState = {
   label: "",
@@ -119,13 +117,11 @@ export const Tuner = ({ definition, onTune, onChange }) => {
               onTune(kvp);
             }}
           />
-          <AudioStreamer enabled source={definition.audioUrl} />
         </FormGroup>
       </CardContent>
       <CardActions>
         {!definition.presets ? (
           <Fragment>
-            {" "}
             <Button onClick={reset} size="small" color="secondary">
               Reset
             </Button>

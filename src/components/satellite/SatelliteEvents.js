@@ -15,32 +15,26 @@ const useStyles = makeStyles((theme) => ({
   root: { maxWidth: "40ch", minWidth: "25ch" },
 }));
 
-export const SatelliteEvents = ({ src, onSelected }) => {
+export const SatelliteEvents = ({ url, onSelected }) => {
   const classes = useStyles();
   const [state, setState] = useState([]);
 
   useEffect(() => {
-    callApi(
-      { url: "http://localhost:1881/api/events?fields=name,nextEvent" },
-      setState
-    );
-  }, [src]);
+    callApi({ url: url }, setState);
+  }, [url]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      callApi(
-        { url: "http://localhost:1881/api/events?fields=name,nextEvent" },
-        setState
-      );
+      callApi({ url: url }, setState);
     }, 1000);
     return () => clearInterval(timer);
-  }, [src]);
+  }, [url]);
 
   return (
     <Card className={classes.root}>
       <CardContent>
         <Typography gutterBottom>AOS</Typography>
-        <TableContainer style={{maxHeight:400}}>
+        <TableContainer style={{ maxHeight: 400 }}>
           <Table padding="checkbox">
             <TableBody>
               {state

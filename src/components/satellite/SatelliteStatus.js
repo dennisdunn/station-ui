@@ -8,20 +8,20 @@ const useStyles = makeStyles((theme) => ({
   root: { maxWidth: "40ch", minWidth: "25ch" },
 }));
 
-export const SatelliteStatus = ({ name, src }) => {
+export const SatelliteStatus = ({ url }) => {
   const classes = useStyles();
   const [state, setState] = useState({});
 
   useEffect(() => {
-    callApi({ url: `${src}/${name}` }, setState);
-  }, [name, src]);
+    callApi({ url: url }, setState);
+  }, [url]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      callApi({ url: `${src}/${name}` }, setState);
+      callApi({ url: url }, setState);
     }, 60000);
     return () => clearInterval(timer);
-  });
+  }, [url]);
 
   const info = { ...state };
   delete info.name;
@@ -30,8 +30,8 @@ export const SatelliteStatus = ({ name, src }) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Typography gutterBottom>{name || "Satellite"}</Typography>
-        {name ? <PropertyList data={format(info)} /> : null}
+        <Typography gutterBottom>{state.name || "Satellite"}</Typography>
+        {state.name ? <PropertyList data={format(info)} /> : null}
       </CardContent>
     </Card>
   );

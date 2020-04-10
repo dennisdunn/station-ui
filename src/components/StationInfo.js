@@ -2,12 +2,12 @@ import React, { useEffect, useState, Fragment } from "react";
 import { defaultStationInfo } from "./default.types";
 import { callApi } from "./services";
 
-export const StationInfo = ({ station }) => {
+export const StationInfo = ({ url }) => {
   const [state, setState] = useState(defaultStationInfo);
 
   useEffect(() => {
-    callApi({ url: station }, ({ location }) => setState(location));
-  }, [station]);
+    callApi({ url: url }, ({ location }) => setState(location));
+  }, [url]);
 
   return (
     <Fragment>

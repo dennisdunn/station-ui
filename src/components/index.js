@@ -1,3 +1,4 @@
+export * from './audio';
 export * from './charts';
 export * from './default.types';
 export * from './nav';
