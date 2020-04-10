@@ -1,7 +1,7 @@
 export const defaultTuner = {
   label: "",
-  minFreq: 0.5,
-  maxFreq: 1750,
+  min: 0.5,
+  max: 1750,
   modes: new Set(),
   showGain: false,
   showSquelch: false,
@@ -27,9 +27,9 @@ export const defaultStationInfo = {
 
 export const tuners = [
   {
-    label: "FM Broadcast",
-    minFreq: 88,
-    maxFreq: 107.9,
+    label: "FM",
+    min: 88,
+    max: 107.9,
     modes: new Set(["fm"]),
     showGain: false,
     showSquelch: false,
@@ -41,9 +41,9 @@ export const tuners = [
     ],
   },
   {
-    label: "FM Broadcast (Adv)",
-    minFreq: 88,
-    maxFreq: 107.9,
+    label: "FM (Adv)",
+    min: 88,
+    max: 107.9,
     modes: new Set(["fm"]),
     showGain: true,
     showSquelch: true,
@@ -52,8 +52,8 @@ export const tuners = [
   },
   {
     label: "NOAA-15",
-    minFreq: 137.0,
-    maxFreq: 138.0,
+    min: 137.0,
+    max: 138.0,
     modes: new Set(["fm"]),
     showGain: true,
     showSquelch: true,
@@ -68,8 +68,8 @@ export const tuners = [
   },
   {
     label: "default",
-    minFreq: 0.5,
-    maxFreq: 1750,
+    min: 0.5,
+    max: 1750,
     modes: new Set(["fm"]),
     showGain: true,
     showSquelch: true,
@@ -84,8 +84,8 @@ export const tuners = [
   },
   {
     label: "NOAA Weather Satellites",
-    minFreq: 137.0,
-    maxFreq: 138.0,
+    min: 137.0,
+    max: 138.0,
     modes: new Set(["fm"]),
     showGain: true,
     showSquelch: true,

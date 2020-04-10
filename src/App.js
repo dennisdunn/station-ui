@@ -14,16 +14,16 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import {
-  AudioCard,
   AzumithChart,
   callApi,
+  CardWrapper,
   SatelliteEvents,
   SatelliteStatus,
   StationClock,
   StationInfo,
   StreamPlayer,
   Tuner,
-  TunerEditor,
+  TunerPresets,
   tuners,
 } from "./components";
 import { getUrl } from "./config";
@@ -45,13 +45,19 @@ function App() {
   const classes = useStyles();
   const [satellite, setSatellite] = useState();
   const [satellites, setSatellites] = useState([]);
-  const [tuner, setTuner] = useState(tuners[0]);
+  const [satTuner, setSatTuner] = useState(tuners[0]);
   const [showNavDrawer, setShowNavDrawer] = useState(false);
-  const [showTunerEditor, setShowTunerEditor] = useState(false);
   const [passData, setPassData] = useState([]);
+  const [presets, setPresets] = useState(tuners[0].presets);
+  const [satTunerSettings, setSatTunerSettings] = useState({});
+  const [fmTunerSettings, setFmTunerSettings] = useState({});
 
   const sdrTune = (data) => {
     callApi({ url: getUrl("sdr", "sdrs"), method: "POST", data });
+  };
+
+  const addPreset = (label) => {
+    setPresets((prev) => [...prev, { ...satTuner, label: label }]);
   };
 
   useEffect(() => {
@@ -71,7 +77,8 @@ function App() {
     if (!satTuner) {
       satTuner = tuners.find((x) => x.label === "default");
     }
-    setTuner(() => ({ ...satTuner, label: satellite }));
+    setSatTuner(() => ({ ...satTuner, label: satellite }));
+    setSatTunerSettings((prev) => ({ ...prev, ...satTuner.current }));
   }, [satellite]);
 
   return (
@@ -107,14 +114,30 @@ function App() {
           <AzumithChart name={satellite} data={passData} />
         </Grid>
         <Grid item>
-          <Tuner definition={tuner} onTune={sdrTune} onChange={setTuner} />
+          <CardWrapper>
+            <Tuner
+              definition={satTuner}
+              {...satTunerSettings}
+              onChange={sdrTune}
+            />
+          </CardWrapper>
         </Grid>
         <Grid item>
-          <AudioCard
-            url={getUrl("audio", "receiver.ogg")}
-            variant="contained"
-            color="primary"
-          />
+          <CardWrapper>
+            <StreamPlayer
+              url={getUrl("audio", "receiver.ogg")}
+              variant="contained"
+              color="primary"
+            />
+          </CardWrapper>
+          <CardWrapper>
+            <Tuner
+              definition={tuners[0]}
+              {...fmTunerSettings}
+              onChange={sdrTune}
+            />
+            <TunerPresets presets={presets} onSelected={setFmTunerSettings} />
+          </CardWrapper>
         </Grid>
       </Grid>
       <Drawer open={showNavDrawer} onClose={() => setShowNavDrawer(false)}>
@@ -145,31 +168,8 @@ function App() {
               <StreamPlayer url={getUrl("audio", "tone")} />
             </ListItem>
           </List>
-          {/* <NavList
-            title="Tuner Definitions"
-            onNew={() => {
-              setShowNavDrawer(false);
-              setShowTunerEditor(true);
-            }}
-          >
-            {tuners.map((v, i) => (
-              <NavListItem
-                key={i}
-                value={v}
-                onClick={(v) => {
-                  setShowNavDrawer(false);
-                  setTuner(v);
-                }}
-              />
-            ))}
-          </NavList> */}
         </div>
       </Drawer>
-      <TunerEditor
-        isOpen={showTunerEditor}
-        onSave={setTuner}
-        onClose={setShowTunerEditor}
-      />
     </div>
   );
 }

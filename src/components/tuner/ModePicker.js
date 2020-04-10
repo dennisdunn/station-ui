@@ -1,13 +1,15 @@
 import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 
-export const ModePicker = ({ visible, value, modes, onChange }) => {
-  
-  return visible ? (
+export const ModePicker = ({ value, modes, onChange }) => {
+  const [local, setLocal] = useState(value);
+
+  return (
     <RadioGroup
       row
-      value={value || modes[0]}
+      value={local}
       onChange={(e, v) => {
+        setLocal(v);
         onChange({ mode: v });
       }}
     >
@@ -20,5 +22,5 @@ export const ModePicker = ({ visible, value, modes, onChange }) => {
         />
       ))}
     </RadioGroup>
-  ) : null;
+  );
 };

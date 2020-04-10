@@ -1,4 +1,5 @@
 export * from './audio';
+export * from './CardWrapper';
 export * from './charts';
 export * from './default.types';
 export * from './nav';

@@ -26,6 +26,7 @@ const path = (options, data) => {
   const points = data.map((d) => `${scale * d.x},${scale * d.y}`).join(" ");
   return (
     <polyline
+      key={'satpath'}
       stroke={options.stroke || "black"}
       fill={options.fill || "none"}
       points={points}
