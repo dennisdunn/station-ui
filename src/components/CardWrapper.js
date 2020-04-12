@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => {
     root: {
       minWidth: "25ch",
       maxWidth: "40ch",
-      marginBottom:theme.spacing(1)
+      marginBottom: theme.spacing(1),
     },
   };
 });
@@ -14,9 +14,15 @@ const useStyles = makeStyles((theme) => {
 export const CardWrapper = ({ children }) => {
   const classes = useStyles();
 
-  return (
-    <Card className={classes.root}>
-      <CardContent>{children}</CardContent>
-    </Card>
+  const content = React.Children.map((el) =>
+    el.type.displayName.startsWith("Card")
+  ).reduce((acc, current) => {
+    return acc || current;
+  }, false) ? (
+    children
+  ) : (
+    <CardContent>{children}</CardContent>
   );
+
+  return <Card className={classes.root}>{content}</Card>;
 };

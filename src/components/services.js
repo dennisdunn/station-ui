@@ -1,6 +1,7 @@
 import { MenuItem } from "@material-ui/core";
 import axios from "axios";
 import React from "react";
+import { getUrl } from "../config";
 
 // network helpers
 
@@ -16,6 +17,21 @@ export const callApi = (options, onData) => {
 
 export const saveSdrSettings = (data) => {
   callApi({ url: "http://localhost:1882/api/sdrs/main", method: "POST", data });
+};
+
+// export const killStream = (name) => {
+//   const url = getUrl("audio", "admin", `killsource.xsl?mount=/${name}`);
+//   callApi({
+//     url: url,
+//     auth: {
+//       username: 'admin',
+//       password: 'hackme'
+//     },
+//   });
+
+export const killStream = async (name) => {
+  const url = getUrl("sdr", "streams", name, "reset");
+  return await fetch(url);
 };
 
 // control helpers

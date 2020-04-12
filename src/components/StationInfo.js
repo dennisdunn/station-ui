@@ -1,12 +1,19 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { defaultStationInfo } from "./default.types";
-import { callApi } from "./services";
+
+export const initState = {
+  designation: "",
+  lat: "",
+  lon: "",
+  elevation: "",
+};
 
 export const StationInfo = ({ url }) => {
-  const [state, setState] = useState(defaultStationInfo);
+  const [state, setState] = useState(initState);
 
   useEffect(() => {
-    callApi({ url: url }, ({ location }) => setState(location));
+    fetch(url)
+      .then((resp) => resp.json())
+      .then(setState);
   }, [url]);
 
   return (

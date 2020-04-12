@@ -1,13 +1,9 @@
 import {
   AppBar,
-  Button,
-  Divider,
   Drawer,
   Grid,
   Icon,
   IconButton,
-  List,
-  ListItem,
   makeStyles,
   Toolbar,
   Typography,
@@ -17,6 +13,8 @@ import {
   AzumithChart,
   callApi,
   CardWrapper,
+  killStream,
+  NavDrawer,
   SatelliteEvents,
   SatelliteStatus,
   StationClock,
@@ -51,25 +49,29 @@ function App() {
   const [presets, setPresets] = useState(tuners[0].presets);
   const [satTunerSettings, setSatTunerSettings] = useState({});
   const [fmTunerSettings, setFmTunerSettings] = useState({});
+  const [streamName, setStreamName] = useState("receiver.ogg");
 
   const sdrTune = (data) => {
     callApi({ url: getUrl("sdr", "sdrs"), method: "POST", data });
   };
 
-  const addPreset = (label) => {
-    setPresets((prev) => [...prev, { ...satTuner, label: label }]);
+  const tuneToPreset = (data) => {
+    setFmTunerSettings(data);
+    sdrTune({ freq: data.freq + "M" });
+    killStream(streamName);
   };
 
   useEffect(() => {
-    callApi({ url: getUrl("predict", "satellites") }, setSatellites);
+    fetch(getUrl("api", "satellites"))
+      .then((resp) => resp.json())
+      .then(setSatellites);
   }, []);
 
   useEffect(() => {
     if (satellite)
-      callApi(
-        { url: getUrl("predict", "satellites", satellite, "predict") },
-        setPassData
-      );
+      fetch(getUrl("api", "satellites", satellite, "predict"))
+        .then((resp) => resp.json())
+        .then(setPassData);
   }, [satellite]);
 
   useEffect(() => {
@@ -95,20 +97,20 @@ function App() {
           <div className={classes.title}>
             <Typography variant="h6">Ground Station Control</Typography>
             <StationClock />
-            <StationInfo url={getUrl("predict", "sys", "location")} />
+            <StationInfo url={getUrl("api", "sys", "location")} />
           </div>
         </Toolbar>
       </AppBar>
       <Grid className={classes.content} container spacing={2}>
         <Grid item>
           <SatelliteEvents
-            url={getUrl("predict", "events?fields=name,nextEvent")}
+            url={getUrl("api", "events?fields=name,nextEvent")}
             data={satellites}
             onSelected={setSatellite}
           />
         </Grid>
         <Grid item>
-          <SatelliteStatus url={getUrl("predict", "satellites", satellite)} />
+          <SatelliteStatus url={getUrl("api", "satellites", satellite)} />
         </Grid>
         <Grid item>
           <AzumithChart name={satellite} data={passData} />
@@ -125,7 +127,7 @@ function App() {
         <Grid item>
           <CardWrapper>
             <StreamPlayer
-              url={getUrl("audio", "receiver.ogg")}
+              url={getUrl("stream", streamName)}
               variant="contained"
               color="primary"
             />
@@ -136,39 +138,12 @@ function App() {
               {...fmTunerSettings}
               onChange={sdrTune}
             />
-            <TunerPresets presets={presets} onSelected={setFmTunerSettings} />
+            <TunerPresets presets={presets} onSelected={tuneToPreset} />
           </CardWrapper>
         </Grid>
       </Grid>
       <Drawer open={showNavDrawer} onClose={() => setShowNavDrawer(false)}>
-        <div className={classes.content}>
-          <Typography>Tools</Typography>
-          <Divider />
-          <List>
-            <ListItem>
-              <Button href={getUrl("sdrAdmin")} target="_blank" size="small">
-                SDR API
-              </Button>
-            </ListItem>
-            <ListItem>
-              <Button
-                href={getUrl("predictAdmin")}
-                target="_blank"
-                size="small"
-              >
-                Predict API
-              </Button>
-            </ListItem>
-            <ListItem>
-              <Button href={getUrl("audioAdmin")} target="_blank" size="small">
-                Audio streams
-              </Button>
-            </ListItem>
-            <ListItem>
-              <StreamPlayer url={getUrl("audio", "tone")} />
-            </ListItem>
-          </List>
-        </div>
+        <NavDrawer />
       </Drawer>
     </div>
   );

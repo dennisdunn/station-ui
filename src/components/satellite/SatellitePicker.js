@@ -1,19 +1,19 @@
 import { Card, CardContent, FormControl, InputLabel, makeStyles, MenuItem, Select } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { callApi } from "../services";
 
 const useStyles = makeStyles((theme) => ({
   root: { maxWidth: "40ch", minWidth: "25ch" },
   formControl: { minWidth: 160 },
 }));
 
-export const SatellitePicker = ({ src, value, onChange }) => {
+export const SatellitePicker = ({ url, value, onChange }) => {
   const classes = useStyles();
-  const [satellites, setSatellites] = useState([]);
+  const [state, setState] = useState([]);
 
-  useEffect(() => {
-    callApi({ url: src }, setSatellites);
-  }, [src]);
+  useEffect(() => { fetch(url)
+    .then((resp) => resp.json())
+    .then(setState);
+  }, [url]);
 
   return (
     <Card className={classes.root}>
@@ -25,7 +25,7 @@ export const SatellitePicker = ({ src, value, onChange }) => {
             value={value||''}
             onChange={(e) => onChange(e.target.value)}
           >
-            {satellites.map((s, i) => (
+            {state.map((s, i) => (
               <MenuItem key={i} value={s}>
                 {s}
               </MenuItem>

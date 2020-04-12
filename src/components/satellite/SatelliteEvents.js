@@ -8,7 +8,6 @@ import {
   TableContainer,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { callApi } from "../services";
 import { SatelliteEventRow } from "./SatelliteEventRow";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,12 +19,16 @@ export const SatelliteEvents = ({ url, onSelected }) => {
   const [state, setState] = useState([]);
 
   useEffect(() => {
-    callApi({ url: url }, setState);
+    fetch(url)
+      .then((resp) => resp.json())
+      .then(setState);
   }, [url]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      callApi({ url: url }, setState);
+      fetch(url)
+        .then((resp) => resp.json())
+        .then(setState);
     }, 1000);
     return () => clearInterval(timer);
   }, [url]);

@@ -1,7 +1,6 @@
 import { Card, CardContent, makeStyles, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { PropertyList } from "../PropertyList";
-import { callApi } from "../services";
 import { format } from "./services";
 
 const useStyles = makeStyles((theme) => ({
@@ -13,12 +12,16 @@ export const SatelliteStatus = ({ url }) => {
   const [state, setState] = useState({});
 
   useEffect(() => {
-    callApi({ url: url }, setState);
+    fetch(url)
+      .then((resp) => resp.json())
+      .then(setState);
   }, [url]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      callApi({ url: url }, setState);
+      fetch(url)
+        .then((resp) => resp.json())
+        .then(setState);
     }, 60000);
     return () => clearInterval(timer);
   }, [url]);
