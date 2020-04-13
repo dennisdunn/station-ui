@@ -6,7 +6,8 @@ services:
         ports:
             - "80:80"
         networks:
-            sysnet:
+            station_default:
         restart: unless-stopped
 networks:
-    sysnet:
+    station_default:
+       external: true
