@@ -11,7 +11,6 @@ import {
 import React, { useEffect, useState } from "react";
 import {
   AzumithChart,
-  callApi,
   CardWrapper,
   killStream,
   NavDrawer,
@@ -49,10 +48,16 @@ function App() {
   const [presets, setPresets] = useState(tuners[0].presets);
   const [satTunerSettings, setSatTunerSettings] = useState({});
   const [fmTunerSettings, setFmTunerSettings] = useState({});
-  const [streamName, setStreamName] = useState("receiver.ogg");
+  const [streamName, setStreamName] = useState("nooelec.ogg");
 
   const sdrTune = (data) => {
-    callApi({ url: getUrl("sdr", "sdrs"), method: "POST", data });
+    fetch(getUrl("api", "sdrs"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
   };
 
   const tuneToPreset = (data) => {

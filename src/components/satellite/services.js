@@ -19,7 +19,7 @@ export const valueFormatters = {
       .replace(".000", "")
       .replace("Z", " UTC"),
   deltat: (x) => {
-    if(x<0)return '00:00:00';
+    if (x < 0) return "00:00:00";
     const delta = new Date(x);
     return `${delta
       .getUTCHours()

@@ -13,7 +13,7 @@ export const StationInfo = ({ url }) => {
   useEffect(() => {
     fetch(url)
       .then((resp) => resp.json())
-      .then(setState);
+      .then((data) => setState(data.location));
   }, [url]);
 
   return (
