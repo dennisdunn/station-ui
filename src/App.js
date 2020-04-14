@@ -51,12 +51,12 @@ function App() {
   const [streamName, setStreamName] = useState("nooelec.ogg");
 
   const sdrTune = (data) => {
-    fetch(getUrl("api", "sdrs"), {
+    fetch(getUrl("api", "sdrs", "freq"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ data: data.freq }),
     });
   };
 

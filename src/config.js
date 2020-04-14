@@ -1,9 +1,9 @@
 export const cfg = {
-  host: "black.local",
+ // host: "black.local",
   stream: "http://{addr}:8000",
-  streamAdmin: "http://{addr}:8000/admin/",
   api: "http://{addr}:1880/api",
   apiAdmin: "http://{addr}:1880/admin/",
+  streamAdmin: "http://{addr}:8000/admin/",
 };
 
 export const getUrl = (key, ...paths) => {
